@@ -8,4 +8,6 @@
 
 .change-mode {
   text-transform: uppercase;
+  font-size: .5em;
+  font-family: sans-serif;
 }
