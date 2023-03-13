@@ -5,3 +5,7 @@
 .ui-8 {
   background-color: aliceblue;
 }
+
+.change-mode {
+  text-transform: uppercase;
+}
