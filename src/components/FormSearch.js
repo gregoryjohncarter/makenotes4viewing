@@ -14,6 +14,7 @@ const FormSearch = () => {
   ]);
   const [searchType, setSearchType] = useState(searchMode[0]);
   const {desc, icon, disabledInput} = searchType;
+  const [togglePallet, setTogglePallet] = useState(false);
 
   const switchMode = (current, direction) => {
     if (direction === 'forwards') {
@@ -31,22 +32,31 @@ const FormSearch = () => {
         setSearchType(searchMode[index - 1]);
       }
     }
+    if (!togglePallet) {
+      setTogglePallet(true);
+      setTimeout(() => {
+        setTogglePallet(false);
+      }, 1500)
+    }
   }
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={4}>
       <Grid item xs={8}>
-        <TextField id='filled-basic' label={desc} variant='filled' disabled={disabledInput} fullWidth/>
-        <div className='search-toggle-container'>
-          <Button onClick={()=> switchMode(searchType, 'backwards')} variant='text'>
-            <Icon>arrow_left</Icon>
-          </Button>
-          <span className='change-mode'>
-            change mode
-          </span>
-          <Button onClick={()=> switchMode(searchType, 'forwards')} variant='text'>
-            <Icon>arrow_right</Icon>
-          </Button>
+        <div  className={togglePallet ? 'search-container search-mode-change' : 'search-container'}>
+          <h2>Make Notes 4 Viewing </h2>
+          <TextField id='filled-basic' label={desc} variant='filled' disabled={disabledInput} fullWidth style={{backgroundColor:'whitesmoke'}}/>
+          <div className='search-toggle-container'>
+            <Button onClick={()=> switchMode(searchType, 'backwards')} variant='secondary'>
+              <Icon style={{color: '#222'}}>arrow_left</Icon>
+            </Button>
+            <span className='change-mode'>
+              change mode
+            </span>
+            <Button onClick={()=> switchMode(searchType, 'forwards')} variant='secondary'>
+              <Icon style={{color: '#222'}}>arrow_right</Icon>
+            </Button>
+          </div>
         </div>
       </Grid>
       <Grid item xs={4}>

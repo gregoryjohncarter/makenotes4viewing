@@ -1,12 +1,12 @@
 import React from 'react';
 
-import MapResults from '../components/MapResults.js';
 import SelectionResults from '../components/SelectionResults.js';
 import CategoriesInput from '../components/CategoriesInput.js';
+import MapResponse from '../components/MapResponse.js';
 
 const ContainerResults = () => {
   return (
-    <MapResults/>
+    <MapResponse/>
   )
 }
 

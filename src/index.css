@@ -1,3 +1,56 @@
+body {
+  background: radial-gradient(circle, transparent 20%, #7889da 20%, #7889da 80%, transparent 80%, transparent), radial-gradient(closest-side, transparent 20%, #7889da 20%, #7889da 80%, transparent 80%, transparent) 30px 30px, linear-gradient(#655c7e 2.4000000000000004px, transparent 2.4000000000000004px) 0 -1.2000000000000002px, linear-gradient(90deg, #424265 2.4000000000000004px, #7889da 2.4000000000000004px) -1.2000000000000002px 0;
+  background-size: 60px 60px, 60px 60px, 30px 60px, 30px 60px;
+  background-blend-mode: luminosity;
+}
+
+body::after {
+  content: "";
+  background-image: linear-gradient(180deg, #656565 0%, #2c2c2c 99%);
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -10;
+  background-repeat: repeat;
+}
+
+h2 {
+  font-size: 1em;
+  color: lightgrey;
+  margin-top: -1px;
+}
+
+.search-container {
+  background: linear-gradient(50deg, #6d7687 20%, #a1a1a1 44%, #6d7687 84%); 
+  padding: 10px;
+  background-position: 0% 50%;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+    background-size: 100% 100%;
+  }
+}
+
+.search-mode-change {
+  background-size: 200% 200%;
+	animation: gradient 2s ease;
+}
+
+.search-toggle-container {
+  background-color: #757575;
+}
+
 .ui-4 {
   background-color: grey;
 }
@@ -10,4 +63,26 @@
   text-transform: uppercase;
   font-size: .5em;
   font-family: sans-serif;
+  color: darkgrey;
+  margin-left: -5px;
+  margin-right: -5px;
+}
+
+/* iOS compatabilty styles */
+@supports (-webkit-touch-callout: none) {
+  .body { 
+    background-blend-mode: lighten;
+  }
+}
+
+@media screen and (max-width: 980px) {
+}
+
+@media screen and (max-width: 768px) {
+}
+
+@media screen and (max-width: 575px) {
+  .search-container {
+    padding: 5px;
+  }
 }
