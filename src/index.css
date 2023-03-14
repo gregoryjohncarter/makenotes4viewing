@@ -27,6 +27,7 @@ h2 {
   background: linear-gradient(50deg, #6d7687 20%, #a1a1a1 44%, #6d7687 84%); 
   padding: 10px;
   background-position: 0% 50%;
+  margin-top: 7px;
 }
 
 @keyframes gradient {
@@ -60,10 +61,18 @@ h2 {
   margin-right: -5px;
 }
 
+.results-div-e {
+  height: 200px;
+  background-color: aliceblue;
+  transition: height 1.5s ease-in-out;
+  padding: 0px;
+}
+
 .results-div {
   height: 500px;
   background-color: aliceblue;
-  transition: padding 2s ease-in-out;
+  transition: height 1.5s ease-in-out;
+  padding: 10px;
 }
 
 .req-btn {
@@ -72,7 +81,7 @@ h2 {
 
 .request-container {
   border: 10px solid #808080cc;
-  /* backdrop-filter: blur(10px); */
+  backdrop-filter: blur(10px);
   width: 5em;
   padding: 20px;
   overflow: hidden;

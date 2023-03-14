@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import FormSearch from '../components/FormSearch.js';
 import ContainerResults from '../components/ContainerResults.js';
@@ -16,8 +16,21 @@ const Home = () => {
   const [searchType, setSearchType] = useState(searchMode[0]);
   const [JSONloading, setJSONloading] = useState(false);
 
+  const [currentResultsArr, setCurrentResultsArr] = useState(false);
+  const [currentSel, setCurrentSel] = useState([]);
+  const [currentSelArr, setCurrentSelArr] = useState([]);
+
+  useEffect(() => {
+    if (JSONloading) {
+      setTimeout(() => {
+        setCurrentResultsArr(true);
+        setJSONloading(false);
+      }, 1000);
+    }
+  }, [JSONloading]);
+
   return (
-    <Container maxWidth='md'>
+    <Container maxWidth='md' style={{marginBottom: '25px'}}>
       <FormSearch 
         searchType={searchType}
         setSearchType={setSearchType}
@@ -25,7 +38,12 @@ const Home = () => {
         JSONloading={JSONloading} 
         setJSONloading={setJSONloading}
       />
-      <ContainerResults/>
+      <ContainerResults
+        currentResultsArr={currentResultsArr}
+        currentSel={currentSel}
+        setCurrentSel={setCurrentSel}
+        currentSelArr={currentSelArr}
+      />
     </Container>
   )
 }
