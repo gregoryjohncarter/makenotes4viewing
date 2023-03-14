@@ -51,14 +51,6 @@ h2 {
   background-color: #757575;
 }
 
-.ui-4 {
-  background-color: grey;
-}
-
-.ui-8 {
-  background-color: aliceblue;
-}
-
 .change-mode {
   text-transform: uppercase;
   font-size: .5em;
@@ -71,6 +63,68 @@ h2 {
 .results-div {
   height: 500px;
   background-color: aliceblue;
+  transition: padding 2s ease-in-out;
+}
+
+.req-btn {
+  left: -2em;
+}
+
+.request-container {
+  border: 10px solid #808080cc;
+  /* backdrop-filter: blur(10px); */
+  width: 5em;
+  padding: 20px;
+  overflow: hidden;
+}
+
+/* Animated Sliding Diagonals Background pattern - Chris Smith codepen */
+.bg {
+  animation:slide 3s ease infinite alternate;
+  background-image: linear-gradient(-60deg, #8464a5 50%, #473f9e 20%);
+  bottom:0;
+  left:-50%;
+  opacity:.5;
+  position:fixed;
+  right:-50%;
+  top:0;
+  z-index:-1;
+  transition: opacity 2s ease;
+}
+
+.bg-0 {
+  animation:slide 3s ease infinite alternate;
+  background-image: linear-gradient(-60deg, #8464a5 50%, #473f9e 20%);
+  bottom:0;
+  left:-50%;
+  opacity:0;
+  position:fixed;
+  right:-50%;
+  top:0;
+  z-index:-1;
+  transition: opacity 2s ease;
+}
+
+.bg2 {
+  animation-direction:alternate-reverse;
+  animation-duration:4s;
+}
+
+.bg3 {
+  animation-duration:5s;
+}
+
+@keyframes slide {
+  0% {
+    transform:translateX(-25%);
+  }
+  100% {
+    transform:translateX(25%);
+  }
+}
+
+.fadeIn {
+  opacity: 0;
 }
 
 /* iOS compatabilty styles */
@@ -89,5 +143,12 @@ h2 {
 @media screen and (max-width: 575px) {
   .search-container {
     padding: 5px;
+  }
+
+  .request-container {
+    margin: -10px;
+    border: 5px solid #808080cc;
+    backdrop-filter: blur(7px);
+    padding: 10px;
   }
 }

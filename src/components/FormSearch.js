@@ -4,16 +4,9 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Icon from '@mui/material/Icon';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
-const FormSearch = () => {
-  const [searchMode] = useState([
-    {desc: 'Search by title', icon: '', disabledInput: false},
-    {desc: 'Search by genre', icon: '', disabledInput: false}, 
-    {desc: 'Search top 100 (TV)', icon: '', disabledInput: true}, 
-    {desc: 'Search top 100 (Film)', icon: '', disabledInput: true}
-  ]);
-  const [searchType, setSearchType] = useState(searchMode[0]);
-  const {desc, icon, disabledInput} = searchType;
+const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, setJSONloading}) => {
   const [togglePallet, setTogglePallet] = useState(false);
 
   const switchMode = (current, direction) => {
@@ -40,10 +33,12 @@ const FormSearch = () => {
     }
   }
 
+  const {desc, icon, disabledInput} = searchType;
+
   return (
     <Grid container spacing={4}>
       <Grid item xs={8}>
-        <div  className={togglePallet ? 'search-container search-mode-change' : 'search-container'}>
+        <div className={togglePallet ? 'search-container search-mode-change' : 'search-container'}>
           <h2>Make Notes 4 Viewing </h2>
           <TextField id='filled-basic' label={desc} variant='filled' disabled={disabledInput} fullWidth style={{backgroundColor:'whitesmoke'}}/>
           <div className='search-toggle-container'>
@@ -59,8 +54,25 @@ const FormSearch = () => {
           </div>
         </div>
       </Grid>
-      <Grid item xs={4}>
-        <div className='ui-8'>xs=4</div>
+      <Grid item xs={4} alignSelf='center'>
+        <Box className='request-container'>
+          {!JSONloading ? 
+            <>
+              <div className='bg-0'></div>
+              <div className='bg-0 bg2'></div>
+              <div className='bg-0 bg3'></div>
+            </> :
+            <>
+              <div className='bg'></div>
+              <div className='bg bg2'></div>
+              <div className='bg bg3'></div>
+            </>
+          }
+          <Button onClick={()=>setJSONloading(true)} color='secondary' variant='contained' startIcon={<Icon>search</Icon>} size='large' className='req-btn'>
+            <span style={{fontSize: '.75em'}}>Search</span>
+          </Button>
+          <h2 style={{fontFamily: 'serif', fontSize: '1em', opacity: .5}}>IMDb API</h2>
+        </Box>
       </Grid>
     </Grid>
   )
