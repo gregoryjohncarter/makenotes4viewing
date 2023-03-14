@@ -12,7 +12,7 @@ body::after {
   left: 0;
   bottom: 0;
   right: 0;
-  position: absolute;
+  position: fixed;
   z-index: -10;
   background-repeat: repeat;
 }
@@ -66,6 +66,11 @@ h2 {
   color: darkgrey;
   margin-left: -5px;
   margin-right: -5px;
+}
+
+.results-div {
+  height: 500px;
+  background-color: aliceblue;
 }
 
 /* iOS compatabilty styles */

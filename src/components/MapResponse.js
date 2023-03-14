@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Grid from '@mui/material/Grid';
 import Icon from '@mui/material/Icon';
@@ -14,7 +14,7 @@ const MapResponse = () => {
   }
 
   return (
-    <Grid container spacing={0}>
+    <Grid container spacing={0} flexDirection='column'>
     </Grid>
   )
 }
