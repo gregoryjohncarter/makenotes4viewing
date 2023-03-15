@@ -34,6 +34,7 @@ const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, setJSON
   }
 
   const {desc, icon, disabledInput} = searchType;
+  const [hoverBtn, setHoverBtn] = useState(false);
 
   return (
     <Grid container spacing={4}>
@@ -55,7 +56,7 @@ const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, setJSON
         </div>
       </Grid>
       <Grid item xs={4} alignSelf='center'>
-        <Box className='request-container'>
+        <Box className='request-container' onClick={()=>setJSONloading(true)} onMouseOver={() => setHoverBtn(true)} onMouseOut={() => setHoverBtn(false)}>
           {!JSONloading ? 
             <>
               <div className='bg-0'></div>
@@ -68,10 +69,19 @@ const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, setJSON
               <div className='bg bg3'></div>
             </>
           }
-          <Button onClick={()=>setJSONloading(true)} color='secondary' variant='contained' startIcon={<Icon>search</Icon>} size='large' className='req-btn'>
-            <span style={{fontSize: '.75em'}}>Search</span>
-          </Button>
-          <h2 style={{fontFamily: 'serif', fontSize: '1em', opacity: .5}}>IMDb API</h2>
+          {hoverBtn ? 
+            <Button color='secondary' variant='text' startIcon={<Icon>south_east</Icon>} size='large' className='req-btn'>
+              <span style={{fontSize: '.85em', cursor: 'pointer'}}>
+                Search
+              </span>
+            </Button> : 
+            <Button disabled color='secondary' variant='text' startIcon={<Icon>south_east</Icon>} size='large' className='req-btn'>
+              <span style={{fontSize: '.85em', cursor: 'pointer'}}>
+                Search
+              </span>
+            </Button>
+          }
+          <h2 style={{fontFamily: 'serif', fontSize: '1em', opacity: .5, cursor: 'pointer'}}>IMDb API</h2>
         </Box>
       </Grid>
     </Grid>

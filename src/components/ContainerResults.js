@@ -14,7 +14,7 @@ const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, current
       <Grid item xs={12}>
         {!currentResultsArr ? 
           <div className='results-div-e'>
-            <Box display='flex' justifyContent='center' alignItems='center'>
+            <Box display='flex' justifyContent='center' style={{paddingTop: '80px'}}>
               <Button size='small' variant='outlined' disabled>Begin by searching</Button>
             </Box>
           </div>

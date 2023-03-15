@@ -64,15 +64,17 @@ h2 {
 .results-div-e {
   height: 200px;
   background-color: aliceblue;
-  transition: height 1.5s ease-in-out;
   padding: 0px;
+  border-radius: 4px;
+  transform-origin: top left;
 }
 
 .results-div {
-  height: 500px;
+  height: 200px;
   background-color: aliceblue;
-  transition: height 1.5s ease-in-out;
   padding: 10px;
+  border-radius: 4px;
+  transform-origin: top left;
 }
 
 .req-btn {
@@ -81,10 +83,12 @@ h2 {
 
 .request-container {
   border: 10px solid #808080cc;
+  background-color:#d3d3d340;
   backdrop-filter: blur(10px);
   width: 5em;
   padding: 20px;
   overflow: hidden;
+  cursor: pointer;
 }
 
 /* Animated Sliding Diagonals Background pattern - Chris Smith codepen */
@@ -147,6 +151,9 @@ h2 {
 }
 
 @media screen and (max-width: 768px) {
+  .req-btn {
+    color: purple !important;
+  }
 }
 
 @media screen and (max-width: 575px) {
@@ -159,5 +166,9 @@ h2 {
     border: 5px solid #808080cc;
     backdrop-filter: blur(7px);
     padding: 10px;
+  }
+
+  .req-btn {
+    padding-left: 21px !important;
   }
 }
