@@ -63,18 +63,39 @@ h2 {
 
 .results-div-e {
   height: 200px;
-  background-color: aliceblue;
-  padding: 0px;
+  background-color: #f0f8ff85;
   border-radius: 4px;
-  transform-origin: top left;
+  padding: 12px;
 }
 
 .results-div {
+  height: 500px;
+  background-color: #f0f8ff85;
+  border-radius: 4px;
+  padding: 12px;
+}
+
+.results-inner-div-e {
   height: 200px;
   background-color: aliceblue;
-  padding: 10px;
   border-radius: 4px;
-  transform-origin: top left;
+}
+
+.results-inner-div {
+  height: 500px;
+  overflow-y: scroll;
+  background-color: aliceblue;
+  border-radius: 4px;
+}
+
+.trim {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 68ch;
+  max-height: 6ch;
+  display: block;
+  font-size: 15px;
 }
 
 .req-btn {
@@ -136,8 +157,19 @@ h2 {
   }
 }
 
-.fadeIn {
-  opacity: 0;
+.fade-scale {
+  animation: transform-decal 1s ease;
+}
+
+@keyframes transform-decal {
+  0% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
 }
 
 /* iOS compatabilty styles */
@@ -148,11 +180,20 @@ h2 {
 }
 
 @media screen and (max-width: 980px) {
+  .trim {
+    max-width: 65ch;
+    font-size: 14px;
+  }
 }
 
 @media screen and (max-width: 768px) {
   .req-btn {
     color: purple !important;
+  }
+
+  .trim {
+    max-width: 55ch;
+    font-size: 12px;
   }
 }
 
@@ -170,5 +211,18 @@ h2 {
 
   .req-btn {
     padding-left: 21px !important;
+  }
+
+  .trim {
+    max-width: 38ch;
+    font-size: 11px;
+  }
+
+  .results-inner-div {
+    height: 625px;
+  }
+
+  .results-div {
+    height: 625px;
   }
 }

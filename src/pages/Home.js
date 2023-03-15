@@ -24,7 +24,9 @@ const Home = () => {
     if (JSONloading) {
       setTimeout(() => {
         setCurrentResultsArr(true);
-        setJSONloading(false);
+        setTimeout(() => {
+          setJSONloading(false);
+        }, 500)
       }, 1000);
     }
   }, [JSONloading]);
