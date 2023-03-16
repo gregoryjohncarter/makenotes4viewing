@@ -6,7 +6,7 @@ import Icon from '@mui/material/Icon';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
-const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, setJSONloading}) => {
+const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, setJSONloading, searchQuery, setSearchQuery, setBreadcrumbQuery}) => {
   const [togglePallet, setTogglePallet] = useState(false);
 
   const switchMode = (current, direction) => {
@@ -33,6 +33,21 @@ const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, setJSON
     }
   }
 
+  const handleSearchBtn = (searchType, searchQuery) => {
+    if (searchType === searchMode[0]) {
+      setBreadcrumbQuery(searchQuery);
+    } else if (searchType === searchMode[1]) {
+      let breadcrumbString = 'Action, Drama';
+      setBreadcrumbQuery(breadcrumbString);
+    } else if (searchType === searchMode[2]) {
+      setBreadcrumbQuery('Top 100 - TV');
+    } else {
+      setBreadcrumbQuery('Top 100 - Film');
+    }
+    setSearchQuery('');
+    setJSONloading(true);
+  }
+
   const {desc, icon, disabledInput} = searchType;
   const [hoverBtn, setHoverBtn] = useState(false);
 
@@ -40,8 +55,17 @@ const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, setJSON
     <Grid container spacing={4}>
       <Grid item xs={8}>
         <div className={togglePallet ? 'search-container search-mode-change' : 'search-container'}>
-          <h2>Make Notes 4 Viewing </h2>
-          <TextField id='filled-basic' label={desc} variant='filled' disabled={disabledInput} fullWidth style={{backgroundColor:'whitesmoke'}}/>
+          <h2>Make Notes 4 Viewing</h2>
+          <TextField 
+            id='filled-basic' 
+            label={desc} 
+            variant='filled' 
+            disabled={disabledInput} 
+            fullWidth 
+            style={{backgroundColor:'whitesmoke'}}
+            onChange={(e)=>setSearchQuery(e.target.value)}
+            value={searchQuery}
+          />
           <div className='search-toggle-container'>
             <Button onClick={()=> switchMode(searchType, 'backwards')} variant='secondary'>
               <Icon style={{color: '#222'}}>arrow_left</Icon>
@@ -56,7 +80,7 @@ const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, setJSON
         </div>
       </Grid>
       <Grid item xs={4} alignSelf='center'>
-        <Box className='request-container' onClick={()=>setJSONloading(true)} onMouseOver={() => setHoverBtn(true)} onMouseOut={() => setHoverBtn(false)}>
+        <Box className='request-container' onClick={()=> handleSearchBtn(searchType, searchQuery)} onMouseOver={() => setHoverBtn(true)} onMouseOut={() => setHoverBtn(false)}>
           {!JSONloading ? 
             <>
               <div className='bg-0'></div>

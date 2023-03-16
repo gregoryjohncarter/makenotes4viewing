@@ -6,9 +6,11 @@ import MapResponse from '../components/MapResponse.js';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
+import Icon from '@mui/material/Icon';
 import Breadcrumbs from '@mui/joy/Breadcrumbs';
 
-const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, currentSelArr, JSONloading}) => {
+const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, currentSelArr, breadcrumbQuery}) => {
   const [preDataFade, setPreDataFade] = useState(false);
 
   useEffect(() => {
@@ -38,8 +40,22 @@ const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, current
               {preDataFade ? 
                 <Box display='flex' justifyContent='center' style={{paddingTop: '80px'}}>
                   <Button size='small' className='fade-scale' variant='outlined' disabled>Begin by searching</Button>
-                </Box> :
-                <MapResponse/>
+                </Box> : <>
+                <Breadcrumbs
+                  separator='/'
+                  size='md'
+                >
+                  <Link
+                    href='/'
+                    underline='hover'
+                    color='neutral'
+                    fontSize='inherit'
+                  >
+                    <span className='crumb-results'><Icon>search</Icon>{breadcrumbQuery} /</span>
+                  </Link>
+                </Breadcrumbs>
+                <MapResponse currentResultsArr={currentResultsArr} setCurrentSel={setCurrentSel}/>
+              </>
               }
             </div>
           </div>

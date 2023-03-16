@@ -1,24 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Grid from '@mui/material/Grid';
 import Icon from '@mui/material/Icon';
 import Button from '@mui/material/Button';
 
-const MapResponse = () => {
-
-  const visitCache = [
-    { title: 'Star Wars: The Django Boba Bounty Hunter Prequels' },
-    { title: 'Star Wars: The Django Boba Bounty Hunter Prequels The New Era' },
-    { title: 'Stago Br Prequels' },
-    { title: 'Star Wars: The DjanHunter Prequels' },
-    { title: 'Star Wars: The Django Boba Bounty Hrequels' },
-    { title: 'Star Wars: The Django Boba Bounty Hunter Prequels' },
-    { title: 'Star Wars: The y Hunter Prequels' },
-    { title: 'Star Wars: The Django Boba Bounty Hunter Prequels' },
-    { title: 'Star Wars: The Django Boba Bounty Hunter Prequels' },
-    { title: 'Star Wars: The y Hunter Prequels' },
-    { title: 'Star Wars: The Django Boba Bounty Hunter Prequels' }
-  ]
+const MapResponse = ({currentResultsArr, setCurrentSel}) => {
 
   const ResItem = ({title, imdbID, type, index, count}) => {
     const stylesWheel = ['#0b69b1', '#0277bd', '#0288d1', '#2a67cf', '#1976d2'];
@@ -37,11 +23,19 @@ const MapResponse = () => {
       border: '2px solid #666',
       color: textColor,
       textAlign: 'center',
+      cursor: 'default'
     }
+    const spanStyle = {
+      '--i': `${count}`
+    };
+    const [hideQueue, setHideQueue] = useState(true);
+    let timeVal = count * 122;
+    setTimeout(() => {
+      setHideQueue(false);
+    }, timeVal);
 
-  
     return (
-      <div>
+      !hideQueue && <div style={spanStyle} className='load-in'>
         {count === 0 && <hr></hr>}
         <span style={counterStyle}>
           {count}
@@ -59,7 +53,7 @@ const MapResponse = () => {
 
   return (
     <Grid container spacing={0} flexDirection='column' alignItems='start'>
-      {visitCache.map((item, index) => {
+      {currentResultsArr.map((item, index) => {
         let indexKey = index;
         if (index > 4) {
           index = index % 5;

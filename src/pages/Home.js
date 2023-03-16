@@ -13,6 +13,8 @@ const Home = () => {
     {desc: 'Search top 100 (Film)', icon: '', disabledInput: true}
   ]);
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [breadcrumbQuery, setBreadcrumbQuery] = useState('');
   const [searchType, setSearchType] = useState(searchMode[0]);
   const [JSONloading, setJSONloading] = useState(false);
 
@@ -23,7 +25,7 @@ const Home = () => {
   useEffect(() => {
     if (JSONloading) {
       setTimeout(() => {
-        setCurrentResultsArr(true);
+        setCurrentResultsArr([{title: 'Star Wars'}]);
         setTimeout(() => {
           setJSONloading(false);
         }, 500)
@@ -39,12 +41,16 @@ const Home = () => {
         searchMode={searchMode}
         JSONloading={JSONloading} 
         setJSONloading={setJSONloading}
+        setSearchQuery={setSearchQuery}
+        searchQuery={searchQuery}
+        setBreadcrumbQuery={setBreadcrumbQuery}
       />
       <ContainerResults
         currentResultsArr={currentResultsArr}
         currentSel={currentSel}
         setCurrentSel={setCurrentSel}
         currentSelArr={currentSelArr}
+        breadcrumbQuery={breadcrumbQuery}
       />
     </Container>
   )
