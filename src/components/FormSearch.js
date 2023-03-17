@@ -9,6 +9,8 @@ import Modal from '@mui/material/Modal';
 
 const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, setJSONloading, searchQuery, setSearchQuery, setBreadcrumbQuery}) => {
   const [togglePallet, setTogglePallet] = useState(false);
+  const [genresAmt, setGenresAmt] = useState(0);
+  const [genresArr, setGenresArr] = useState([]);
 
   const switchMode = (current, direction) => {
     if (direction === 'forwards') {
@@ -19,17 +21,24 @@ const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, setJSON
         setSearchQuery('');
       } else {
         let index = searchMode.indexOf(current);
+        setSearchQuery('');
         setSearchType(searchMode[index + 1]);
+        setGenresAmt(0);
+        setGenresArr([]);
       }
     } else {
       if (current === searchMode[0]) {
         setSearchType(searchMode[3]);
+        setSearchQuery('');
       } else if (current === searchMode[2]) {
         setSearchType(searchMode[1]);
         setSearchQuery('');
       } else {
         let index = searchMode.indexOf(current);
         setSearchType(searchMode[index - 1]);
+        setGenresAmt(0);
+        setGenresArr([]);
+        setSearchQuery('');
       }
     }
     if (!togglePallet) {
@@ -77,100 +86,93 @@ const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, setJSON
   const [genreListCol2] = useState([
     'Horror', 'Music', 'Musical', 'Mystery', 'News', 'Reality-TV', 'Romance', 'Sci-Fi', 'Sport', 'Talk-Show', 'Thriller', 'War', 'Western'
   ]);
-  const [genresAmt, setGenresAmt] = useState(0);
 
   const handleGenreList = (genre, currentInput) => {
-    if (currentInput.length === 0) {
-      let stringVar = currentInput;
-      stringVar += genre;
-      setSearchQuery(stringVar);
+    if (genresAmt === 3) {
+      if (!genresArr.includes(genre)) {
+        return
+      }
+    }
+    if (genresArr.length === 0) {
+      let stringAddition = currentInput.slice(0);
+      stringAddition += genre;
+      setSearchQuery(stringAddition);
       setGenresAmt(1);
+      setGenresArr([genre]);
     } else {
       if (currentInput) {
-        let stringVar = currentInput;
+        let stringAddition = currentInput.slice(0);
         if (currentInput.includes(genre)) {
-          let stringInput = currentInput.split('');
+          let buildArr = [];
           if (genresAmt === 1) {
             setSearchQuery('');
+            setGenresArr([]);
             setGenresAmt(0);
             return
           } else if (genresAmt === 2) {
-            let indexStart = currentInput.indexOf(',');
-            let stringMix = stringVar.split(',');
-            let current = stringMix[0];
-            if (current.includes(genre)) {
-              stringInput = stringInput.splice(indexStart, stringInput.length - indexStart);
-              for (let char of stringInput) {
-                if (char === char.toUpperCase()) {
-                  indexStart = stringInput.indexOf(char) + 2;
-                  break;
-                }
-              }
-              stringInput = stringInput.splice(indexStart, stringInput.length);
-            } 
-            indexStart = currentInput.indexOf(',');
-            if (stringMix[1].includes(genre)) {
-              stringInput = stringInput.splice(0, indexStart);
-              for (let char of stringInput) {
-                if (char === char.toUpperCase()) {
-                  indexStart = stringInput.indexOf(char) + 2;
-                  break;
-                }
+            for (let genres of genresArr) {
+              if (genres !== genre) {
+                buildArr.push(genres);
               }
             }
+            setSearchQuery(buildArr[0]);
+            setGenresAmt(genresAmt - 1);
+            setGenresArr(buildArr);
+            return
           } else {
-            let indexStart = currentInput.indexOf(',');
-            let stringMix = stringVar.split(',');
-            let current = stringMix[0];
-            if (current.includes(genre)) {
-              stringInput = stringInput.splice(indexStart, stringInput.length - indexStart);
-              for (let char of stringInput) {
-                if (char === char.toUpperCase()) {
-                  indexStart = stringInput.indexOf(char) + 2;
-                  break;
-                }
+            for (let genres of genresArr) {
+              if (genres !== genre) {
+                buildArr.push(genres);
               }
             }
-            indexStart = currentInput.indexOf(',');
-            let nextIndex = currentInput.indexOf(',', indexStart);
-            nextIndex = indexStart + nextIndex;
-            if (stringMix[1].includes(genre)) {
-              stringInput = stringInput.splice(indexStart, stringInput.length - nextIndex);
-              for (let char of stringInput) {
-                if (char === char.toUpperCase()) {
-                  indexStart = stringInput.indexOf(char, indexStart) + 2;
-                  break;
-                }
-              }
-            } 
-            indexStart = currentInput.indexOf(',');
-            nextIndex = currentInput.indexOf(',', indexStart);
-            nextIndex = indexStart + nextIndex;
-            if (stringMix[2].includes(genre)) {
-              stringInput = stringInput.splice(nextIndex, stringInput.length - nextIndex);
-
-              // for (let char of stringInput) {
-              //   if (char === char.toUpperCase()) {
-              //     indexStart = stringInput.indexOf(char, indexStart) + 2;
-              //     break;
-              //   }
-              // }
-            }
+            let buildString = buildArr.join(' ');
+            let breakPoint = buildString.indexOf(' ');
+            buildString = buildString.split('');
+            buildString.splice(breakPoint, 0, ', ');
+            setSearchQuery(buildString.join(''));
+            setGenresAmt(genresAmt - 1);
+            setGenresArr(buildArr);
+            return
           }
-          stringInput = stringInput.join('');
-          setSearchQuery(stringInput);
-          setGenresAmt(genresAmt - 1);
-          return 
         }
-        stringVar += ', ';
-        stringVar += genre;
-        setSearchQuery(stringVar);
-        setGenresAmt(genresAmt + 1);
+        if (genresArr.length === 0) {
+          setGenresArr([genre]);
+          stringAddition += ', ';
+          stringAddition += genre;
+          setSearchQuery(stringAddition);
+          setGenresAmt(genresAmt + 1);
+        } else {
+          let buildArr = [];
+          for (let i = 0; i < genresArr.length; i++) {
+            buildArr.push(genresArr[i])
+          }
+          if (buildArr.length === 1) {
+            let stringArr = buildArr.slice(0);
+            stringArr.push(', ');
+            buildArr.push(genre);
+            setGenresArr(buildArr);
+            stringArr.push(genre);
+            let stringQuery = stringArr.join('');
+            setSearchQuery(stringQuery);
+            setGenresAmt(genresAmt + 1);
+          } else {
+            buildArr.pop();
+            let stringArr = buildArr.slice(0);
+            stringArr.push(', ');
+            buildArr.push(genresArr[genresArr.length - 1]);
+            stringArr.push(genresArr[genresArr.length - 1]);
+            stringArr.push(', ');
+            buildArr.push(genre);
+            setGenresArr(buildArr);
+            stringArr.push(genre);
+            let stringQuery = stringArr.join('');
+            setSearchQuery(stringQuery);
+            setGenresAmt(genresAmt + 1);
+          }
+        }
       }
     }
   }
-  console.log(searchQuery);
-  console.log(genresAmt)
 
   return (
     <><Grid container spacing={4}>
