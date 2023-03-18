@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 
-const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, setJSONloading, searchQuery, setSearchQuery, setBreadcrumbQuery}) => {
+const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, searchQuery, setSearchQuery, enterSearchUtility, secondaryLoading, currentResultsArr, setFocusBar}) => {
   const [togglePallet, setTogglePallet] = useState(false);
   const [genresAmt, setGenresAmt] = useState(0);
   const [genresArr, setGenresArr] = useState([]);
@@ -47,21 +47,6 @@ const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, setJSON
         setTogglePallet(false);
       }, 1500)
     }
-  }
-
-  const handleSearchBtn = (searchType, searchQuery) => {
-    if (searchType === searchMode[0]) {
-      setBreadcrumbQuery(searchQuery);
-    } else if (searchType === searchMode[1]) {
-      let breadcrumbString = 'Action, Drama';
-      setBreadcrumbQuery(breadcrumbString);
-    } else if (searchType === searchMode[2]) {
-      setBreadcrumbQuery('Top 100 - TV');
-    } else {
-      setBreadcrumbQuery('Top 100 - Film');
-    }
-    setSearchQuery('');
-    setJSONloading(true);
   }
 
   const {desc, icon, disabledInput} = searchType;
@@ -128,7 +113,7 @@ const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, setJSON
             let buildString = buildArr.join(' ');
             let breakPoint = buildString.indexOf(' ');
             buildString = buildString.split('');
-            buildString.splice(breakPoint, 0, ', ');
+            buildString.splice(breakPoint, 0, ',');
             setSearchQuery(buildString.join(''));
             setGenresAmt(genresAmt - 1);
             setGenresArr(buildArr);
@@ -192,7 +177,7 @@ const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, setJSON
           /> :
           <TextField 
             id='filled-basic' 
-            label={desc} 
+            label={desc}  
             onClick={()=>setOpenModal(true)}
             variant='filled' 
             disabled={disabledInput} 
@@ -215,8 +200,8 @@ const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, setJSON
         </div>
       </Grid>
       <Grid item xs={4} alignSelf='center'>
-        <Box className='request-container' onClick={()=> handleSearchBtn(searchType, searchQuery)} onMouseOver={() => setHoverBtn(true)} onMouseOut={() => setHoverBtn(false)}>
-          {!JSONloading ? 
+        <Box className='request-container' onClick={!currentResultsArr && !searchQuery.length ? () => setFocusBar('toggle') : () => enterSearchUtility(searchQuery, searchType, secondaryLoading)} onMouseOver={() => setHoverBtn(true)} onMouseOut={() => setHoverBtn(false)}>
+          {!JSONloading && !secondaryLoading ? 
             <>
               <div className='bg-0'></div>
               <div className='bg-0 bg2'></div>
@@ -258,14 +243,14 @@ const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, setJSON
           <div style={{flex: '1 50%'}}>
             <p className='center right'>
               {genreListCol1.map((genre, index) => {
-                return <Button onClick={()=>handleGenreList(genre, searchQuery)} style={{width: '150px', marginTop: '10px'}} className={searchQuery.includes(genre) && 'select-btn-g'} variant='outlined' key={String(index) + 'gen'}>{genre}</Button> 
+                return <Button onClick={()=>handleGenreList(genre, searchQuery)} style={{width: '150px', marginTop: '10px'}} className={searchQuery.includes(genre) ? 'select-btn-g' : ''} variant='outlined' key={String(index) + 'gen'}>{genre}</Button> 
               })}
             </p>
           </div>
           <div style={{flex: '1 50%'}}>
             <p className='center left'>
               {genreListCol2.map((genre, index) => {
-                return <Button onClick={()=>handleGenreList(genre, searchQuery)} style={{width: '150px', marginTop: '10px'}} className={searchQuery.includes(genre) && 'select-btn-g'} variant='outlined' key={String(index) + 'gen'}>{genre}</Button> 
+                return <Button onClick={()=>handleGenreList(genre, searchQuery)} style={{width: '150px', marginTop: '10px'}} className={searchQuery.includes(genre) ? 'select-btn-g' : ''} variant='outlined' key={String(index) + 'gen'}>{genre}</Button> 
               })}
             </p>
           </div>

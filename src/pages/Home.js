@@ -23,15 +23,93 @@ const Home = () => {
   const [currentSelArr, setCurrentSelArr] = useState([]);
 
   useEffect(() => {
+    if (secondaryLoading) {
+      setSecondaryLoading(false);
+    }
+    setSearchQuery('');
+  }, [currentResultsArr]);
+
+  useEffect(() => {
     if (JSONloading) {
       setTimeout(() => {
-        setCurrentResultsArr([{title: 'Star Wars'}]);
-        setTimeout(() => {
-          setJSONloading(false);
-        }, 500)
+        setJSONloading(false);
+      }, 1800);
+    }
+  }, [JSONloading])
+
+  const [focusBar, setFocusBar] = useState(false);
+
+  useEffect(() => {
+    if (focusBar === 'toggle') {
+      setTimeout(() => {
+        setFocusBar('');
       }, 1000);
     }
-  }, [JSONloading]);
+  }, [focusBar])
+
+  const [secondaryLoading, setSecondaryLoading] = useState(false);
+
+  const enterSearchUtility = (searchQuery, searchType, loading) => {
+    if (loading) {
+      return
+    }
+    if (searchQuery.length) {
+      setSecondaryLoading(true);
+    }
+    if (searchType === searchMode[0]) {
+      searchQuery = searchQuery.trim('');
+      if (searchQuery) {
+        const searchByInput = async (searchQuery) => {
+          let apiUrlTitle = "https://www.omdbapi.com/?apikey=" + process.env.REACT_APP_REQUESTHOMEKEY + "&s=" + searchQuery;
+          try {
+            let nearTermResults = await fetch(apiUrlTitle);
+            let dataResults = await nearTermResults.json();
+            if (dataResults.Response === 'True') {
+              let transferResults = (data) => {
+                setCurrentResultsArr(data.Search);
+              }
+              setBreadcrumbQuery(searchQuery);
+              transferResults(dataResults);
+            } else {
+              setBreadcrumbQuery('No results found');
+              setCurrentResultsArr([]);
+              return
+            }
+          } catch (error) {
+            console.log(error);
+            setBreadcrumbQuery('Request failed');
+            setCurrentResultsArr([]);
+          }
+        }
+        setJSONloading(true);
+        searchByInput(searchQuery);
+      } else {
+        return
+      }
+    } else if (searchType === searchMode[1]) {
+      if (searchQuery) {
+        const searchByLabel = async (searchQuery) => {
+
+        }
+        setJSONloading(true);
+        setBreadcrumbQuery(searchQuery);
+      } else {
+        return
+      }
+    } else if (searchType === searchMode[2]) {
+      const searchByChartT = async () => {
+
+      }
+      setJSONloading(true);
+      setBreadcrumbQuery('Top 100 - TV');
+    } else {
+      const searchByChartF = async () => {
+
+      }
+      setJSONloading(true);
+      setBreadcrumbQuery('Top 100 - Film');
+    }
+  }
 
   return (
     <Container maxWidth='md' style={{marginBottom: '25px'}}>
@@ -40,10 +118,12 @@ const Home = () => {
         setSearchType={setSearchType}
         searchMode={searchMode}
         JSONloading={JSONloading} 
-        setJSONloading={setJSONloading}
         setSearchQuery={setSearchQuery}
         searchQuery={searchQuery}
-        setBreadcrumbQuery={setBreadcrumbQuery}
+        enterSearchUtility={enterSearchUtility}
+        secondaryLoading={secondaryLoading}
+        currentResultsArr={currentResultsArr}
+        setFocusBar={setFocusBar}
       />
       <ContainerResults
         currentResultsArr={currentResultsArr}
@@ -51,6 +131,8 @@ const Home = () => {
         setCurrentSel={setCurrentSel}
         currentSelArr={currentSelArr}
         breadcrumbQuery={breadcrumbQuery}
+        focusBar={focusBar}
+        JSONloading={JSONloading}
       />
     </Container>
   )

@@ -241,6 +241,28 @@ h2 {
   font-weight: bold;
 }
 
+.wo-input {
+  animation: shake-dialogue 2s ease;
+}
+
+@keyframes shake-dialogue {
+  0% {
+    transform: translateX(0px);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+  75% {
+    transform: translateX(-4px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+
 /* iOS compatabilty styles */
 @supports (-webkit-touch-callout: none) {
   .body { 
@@ -301,7 +323,7 @@ h2 {
   }
 
   .crumb-results {
-    max-width: 20ch;
+    max-width: 25ch;
     font-size: 10px;
   }
 

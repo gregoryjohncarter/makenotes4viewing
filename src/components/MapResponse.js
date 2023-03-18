@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 
 import Grid from '@mui/material/Grid';
 import Icon from '@mui/material/Icon';
 import Button from '@mui/material/Button';
 
-const MapResponse = ({currentResultsArr, setCurrentSel}) => {
-
+const MapResponse = memo(function MapResponse({currentResultsArr, setCurrentSel, JSONloading}) {
   const ResItem = ({title, imdbID, type, index, count}) => {
     const stylesWheel = ['#0b69b1', '#0277bd', '#0288d1', '#2a67cf', '#1976d2'];
     let alternation = 'grey';
@@ -38,7 +37,7 @@ const MapResponse = ({currentResultsArr, setCurrentSel}) => {
       !hideQueue && <div style={spanStyle} className='load-in'>
         {count === 0 && <hr></hr>}
         <span style={counterStyle}>
-          {count}
+          {count + 1}
         </span>
         <Button disabled variant='text'>
           <span style={{color: stylesWheel[index]}} className='trim'>
@@ -53,15 +52,15 @@ const MapResponse = ({currentResultsArr, setCurrentSel}) => {
 
   return (
     <Grid container spacing={0} flexDirection='column' alignItems='start'>
-      {currentResultsArr.map((item, index) => {
+      {!JSONloading && currentResultsArr.map((item, index) => {
         let indexKey = index;
         if (index > 4) {
           index = index % 5;
         }
-        return <ResItem title={item.title} index={index} count={indexKey} key={indexKey}/>
+        return <ResItem title={item.Title} index={index} count={indexKey} key={indexKey}/>
       })}
     </Grid>
   )
-}
+})
 
 export default MapResponse;

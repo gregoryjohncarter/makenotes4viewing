@@ -10,7 +10,7 @@ import Link from '@mui/material/Link';
 import Icon from '@mui/material/Icon';
 import Breadcrumbs from '@mui/joy/Breadcrumbs';
 
-const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, currentSelArr, breadcrumbQuery}) => {
+const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, currentSelArr, breadcrumbQuery, focusBar, JSONloading}) => {
   const [preDataFade, setPreDataFade] = useState(false);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, current
         setPreDataFade(false);
       }, 1000);
     }
-  }, [currentResultsArr])
+  }, [currentResultsArr]);
 
   return (
     <Grid container rowSpacing={2}>
@@ -29,8 +29,8 @@ const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, current
         {!currentResultsArr ? 
           <div className='results-div-e'>
             <div className='results-inner-div-e'>
-              <Box display='flex' justifyContent='center' style={{paddingTop: '80px'}}>
-                <Button size='small' variant='outlined' disabled>Begin by searching</Button>
+              <Box display='flex' className={focusBar === 'toggle' ? 'wo-input' : ''} justifyContent='center' style={{paddingTop: '80px'}}>
+                <Button size='small' variant='outlined' disabled>Begin by searching above</Button>
               </Box>
             </div>
           </div>
@@ -39,7 +39,7 @@ const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, current
             <div className='results-inner-div'>
               {preDataFade ? 
                 <Box display='flex' justifyContent='center' style={{paddingTop: '80px'}}>
-                  <Button size='small' className='fade-scale' variant='outlined' disabled>Begin by searching</Button>
+                  <Button size='small' className='fade-scale' variant='outlined' disabled>Begin by searching above</Button>
                 </Box> : <>
                 <Breadcrumbs
                   separator='/'
@@ -51,10 +51,10 @@ const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, current
                     color='neutral'
                     fontSize='inherit'
                   >
-                    <span className='crumb-results'><Icon>search</Icon>{breadcrumbQuery} /</span>
+                    <span className='crumb-results'><Icon>search</Icon>{breadcrumbQuery}</span>
                   </Link>
                 </Breadcrumbs>
-                <MapResponse currentResultsArr={currentResultsArr} setCurrentSel={setCurrentSel}/>
+                <MapResponse currentResultsArr={currentResultsArr} setCurrentSel={setCurrentSel} JSONloading={JSONloading}/>
               </>
               }
             </div>
