@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import FormSearch from '../components/FormSearch.js';
 import ContainerResults from '../components/ContainerResults.js';
 
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 
 const Home = () => {
@@ -21,13 +23,14 @@ const Home = () => {
   const [currentResultsArr, setCurrentResultsArr] = useState(false);
   const [currentSel, setCurrentSel] = useState([]);
   const [currentSelArr, setCurrentSelArr] = useState([]);
+  const [latentResultsArr, setLatentResultsArr] = useState([]);
 
   useEffect(() => {
     if (secondaryLoading) {
       setSecondaryLoading(false);
     }
     setSearchQuery('');
-  }, [currentResultsArr]);
+  }, [currentResultsArr, latentResultsArr]);
 
   useEffect(() => {
     if (JSONloading) {
@@ -53,7 +56,7 @@ const Home = () => {
     if (loading) {
       return
     }
-    if (searchQuery.length) {
+    if (searchQuery.trim().length) {
       setSecondaryLoading(true);
     }
     if (searchType === searchMode[0]) {
@@ -89,10 +92,30 @@ const Home = () => {
     } else if (searchType === searchMode[1]) {
       if (searchQuery) {
         const searchByLabel = async (searchQuery) => {
-
+          var apiUrlGenre = "https://imdb-api.com/API/AdvancedSearch/" + process.env.REACT_APP_REQUESTACCKEY + "/?genres=" + searchQuery + "&count=150";
+          apiUrlGenre = apiUrlGenre.replace(/ /g, '');
+          try {
+            let nearLabelsResults = await fetch(apiUrlGenre);
+            let dataResults = await nearLabelsResults.json();
+            if (dataResults.results.length > 0) {
+              let transferResults = (data) => {
+                setLatentResultsArr(data.results);
+              }
+              setBreadcrumbQuery(searchQuery);
+              transferResults(dataResults);
+            } else {
+              setBreadcrumbQuery('No results found');
+              setCurrentResultsArr([]);
+              return
+            }
+          } catch (error) {
+            console.log(error);
+            setBreadcrumbQuery('Request failed');
+            setCurrentResultsArr([]);
+          }
         }
         setJSONloading(true);
-        setBreadcrumbQuery(searchQuery);
+        searchByLabel(searchQuery);
       } else {
         return
       }
@@ -110,6 +133,33 @@ const Home = () => {
       setBreadcrumbQuery('Top 100 - Film');
     }
   }
+
+  const [pageCount, setPageCount] = useState(false);
+  const [currentPage, setCurrentPage] = useState(false);
+
+  useEffect(() => {
+    if (latentResultsArr.length < 30) {
+      setPageCount(1);
+      setCurrentPage(1);
+      setCurrentResultsArr(latentResultsArr)
+    } else {
+      setPageCount(Math.floor(latentResultsArr.length / 30));
+      setCurrentPage(1);
+    }
+  }, [latentResultsArr]);
+
+  useEffect(() => {
+    if (currentPage === 1) {
+      setCurrentResultsArr(latentResultsArr.slice(0, 30));
+    } else {
+      let left = 0;
+      let right = 30;
+      
+      right = currentPage * right;
+      left = right - 30;
+      setCurrentResultsArr(latentResultsArr.slice(left, right));
+    }
+  }, [currentPage]);
 
   return (
     <Container maxWidth='md' style={{marginBottom: '25px'}}>
@@ -133,7 +183,17 @@ const Home = () => {
         breadcrumbQuery={breadcrumbQuery}
         focusBar={focusBar}
         JSONloading={JSONloading}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        pageCount={pageCount}
       />
+      {searchType !== searchMode[0] && 
+        <Box display='flex'>
+          <div style={{display: 'flex'}}>
+            <Button variant='contained' disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)} style={{width: '100px', marginTop: '10px'}}>Previous &lt; page</Button>
+            <Button variant='contained' disabled={currentPage === pageCount} onClick={() => setCurrentPage(currentPage + 1)} style={{width: '100px', marginTop: '10px'}}>Next page &gt;</Button>
+          </div>
+        </Box>}
     </Container>
   )
 }

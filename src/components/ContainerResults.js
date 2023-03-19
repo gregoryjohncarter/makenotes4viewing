@@ -10,11 +10,11 @@ import Link from '@mui/material/Link';
 import Icon from '@mui/material/Icon';
 import Breadcrumbs from '@mui/joy/Breadcrumbs';
 
-const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, currentSelArr, breadcrumbQuery, focusBar, JSONloading}) => {
+const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, currentSelArr, breadcrumbQuery, focusBar, JSONloading, currentPage, setCurrentPage, pageCount, searchType, searchMode}) => {
   const [preDataFade, setPreDataFade] = useState(false);
 
   useEffect(() => {
-    if (!currentResultsArr) {
+    if (!currentResultsArr.length) {
       setPreDataFade(true);
     } else {
       setTimeout(() => {
@@ -26,7 +26,7 @@ const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, current
   return (
     <Grid container rowSpacing={2}>
       <Grid item xs={12}>
-        {!currentResultsArr ? 
+        {!currentResultsArr.length ? 
           <div className='results-div-e'>
             <div className='results-inner-div-e'>
               <Box display='flex' className={focusBar === 'toggle' ? 'wo-input' : ''} justifyContent='center' style={{paddingTop: '80px'}}>
@@ -54,7 +54,7 @@ const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, current
                     <span className='crumb-results'><Icon>search</Icon>{breadcrumbQuery}</span>
                   </Link>
                 </Breadcrumbs>
-                <MapResponse currentResultsArr={currentResultsArr} setCurrentSel={setCurrentSel} JSONloading={JSONloading}/>
+                <MapResponse currentResultsArr={currentResultsArr} setCurrentSel={setCurrentSel} JSONloading={JSONloading} currentPage={currentPage} setCurrentPage={setCurrentPage} pageCount={pageCount}/>
               </>
               }
             </div>

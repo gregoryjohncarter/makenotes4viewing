@@ -212,8 +212,14 @@ h2 {
 }
 
 .modal-style {
-  width: '620px'
+  width: '620px';
+  height: '100vh';
 }
+
+.mytbl{
+  max-height: calc(100vh - 120px);
+  overflow: scroll;
+  }
 
 .select-btn-g {
   background: linear-gradient(180deg, #373490 0%, #1800b6 45%, #260f54 99%);
@@ -279,6 +285,10 @@ h2 {
     max-width: 65ch;
     font-size: 14px;
   }
+
+  .modal-style {
+    width: '580px'
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -289,6 +299,9 @@ h2 {
   .trim {
     max-width: 55ch;
     font-size: 12px;
+  }
+  .modal-style {
+    width: '520px'
   }
 }
 
@@ -315,7 +328,7 @@ h2 {
 
   .results-inner-div {
     height: 625px;
-    overflow-y: initial;
+    overflow-y: scroll;
   }
 
   .results-div {

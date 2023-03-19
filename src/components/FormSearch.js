@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 
+import CategoriesInput from './CategoriesInput.js';
+
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Icon from '@mui/material/Icon';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
 
 const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, searchQuery, setSearchQuery, enterSearchUtility, secondaryLoading, currentResultsArr, setFocusBar}) => {
   const [togglePallet, setTogglePallet] = useState(false);
@@ -53,24 +54,6 @@ const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, searchQ
   const [hoverBtn, setHoverBtn] = useState(false);
 
   const [openModal, setOpenModal] = useState(false);
-
-  const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    backgroundColor: '#d3d3d3dd',
-    border: '2px solid #000',
-    flexDirection: 'column',
-    padding: '20px'
-  };
-
-  const [genreListCol1] = useState([
-    'Action', 'Adventure', 'Animation', 'Biography', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Family', 'Fantasy', 'Film-Noir', 'Game-Show', 'History'
-  ]);
-  const [genreListCol2] = useState([
-    'Horror', 'Music', 'Musical', 'Mystery', 'News', 'Reality-TV', 'Romance', 'Sci-Fi', 'Sport', 'Talk-Show', 'Thriller', 'War', 'Western'
-  ]);
 
   const handleGenreList = (genre, currentInput) => {
     if (genresAmt === 3) {
@@ -160,103 +143,78 @@ const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, searchQ
   }
 
   return (
-    <><Grid container spacing={4}>
-      <Grid item xs={8}>
-        <div className={togglePallet ? 'search-container search-mode-change' : 'search-container'}>
-          <h2>Make Notes 4 Viewing</h2>
-          {searchType !== searchMode[1] ? 
-          <TextField 
-            id='filled-basic' 
-            label={desc} 
-            variant='filled' 
-            disabled={disabledInput} 
-            fullWidth 
-            style={{backgroundColor:'whitesmoke'}}
-            onChange={(e)=>setSearchQuery(e.target.value)}
-            value={searchQuery}
-          /> :
-          <TextField 
-            id='filled-basic' 
-            label={desc}  
-            onClick={()=>setOpenModal(true)}
-            variant='filled' 
-            disabled={disabledInput} 
-            fullWidth 
-            style={{backgroundColor:'whitesmoke'}}
-            value={searchQuery}
-          />}
+    <>
+      <Grid container spacing={4}>
+        <Grid item xs={8}>
+          <div className={togglePallet ? 'search-container search-mode-change' : 'search-container'}>
+            <h2>Make Notes 4 Viewing</h2>
+            {searchType !== searchMode[1] ? 
+            <TextField 
+              id='filled-basic' 
+              label={desc} 
+              variant='filled' 
+              disabled={disabledInput} 
+              fullWidth 
+              style={{backgroundColor:'whitesmoke'}}
+              onChange={(e)=>setSearchQuery(e.target.value)}
+              value={searchQuery}
+            /> :
+            <TextField 
+              id='filled-basic' 
+              label={desc}  
+              onClick={()=>setOpenModal(true)}
+              variant='filled' 
+              disabled={disabledInput} 
+              fullWidth 
+              style={{backgroundColor:'whitesmoke'}}
+              value={searchQuery}
+            />}
 
-          <div className='search-toggle-container'>
-            <Button onClick={()=> switchMode(searchType, 'backwards')} variant='secondary'>
-              <Icon style={{color: '#222'}}>arrow_left</Icon>
-            </Button>
-            <span className='change-mode'>
-              change mode
-            </span>
-            <Button onClick={()=> switchMode(searchType, 'forwards')} variant='secondary'>
-              <Icon style={{color: '#222'}}>arrow_right</Icon>
-            </Button>
-          </div>
-        </div>
-      </Grid>
-      <Grid item xs={4} alignSelf='center'>
-        <Box className='request-container' onClick={!currentResultsArr && !searchQuery.length ? () => setFocusBar('toggle') : () => enterSearchUtility(searchQuery, searchType, secondaryLoading)} onMouseOver={() => setHoverBtn(true)} onMouseOut={() => setHoverBtn(false)}>
-          {!JSONloading && !secondaryLoading ? 
-            <>
-              <div className='bg-0'></div>
-              <div className='bg-0 bg2'></div>
-              <div className='bg-0 bg3'></div>
-            </> :
-            <>
-              <div className='bg'></div>
-              <div className='bg bg2'></div>
-              <div className='bg bg3'></div>
-            </>
-          }
-          {hoverBtn ? 
-            <Button color='secondary' variant='text' startIcon={<Icon>south_east</Icon>} size='large' className='req-btn'>
-              <span style={{fontSize: '.85em', cursor: 'pointer'}}>
-                Search
+            <div className='search-toggle-container'>
+              <Button onClick={()=> switchMode(searchType, 'backwards')} variant='secondary'>
+                <Icon style={{color: '#222'}}>arrow_left</Icon>
+              </Button>
+              <span className='change-mode'>
+                change mode
               </span>
-            </Button> : 
-            <Button disabled color='secondary' variant='text' startIcon={<Icon>south_east</Icon>} size='large' className='req-btn'>
-              <span style={{fontSize: '.85em', cursor: 'pointer'}}>
-                Search
-              </span>
-            </Button>
-          }
-          <h2 style={{fontFamily: 'serif', fontSize: '1em', opacity: .5, cursor: 'pointer'}}>IMDb API</h2>
-        </Box>
+              <Button onClick={()=> switchMode(searchType, 'forwards')} variant='secondary'>
+                <Icon style={{color: '#222'}}>arrow_right</Icon>
+              </Button>
+            </div>
+          </div>
+        </Grid>
+        <Grid item xs={4} alignSelf='center'>
+          <Box className='request-container' onClick={!currentResultsArr.length && !searchQuery.length ? () => setFocusBar('toggle') : () => enterSearchUtility(searchQuery, searchType, secondaryLoading)} onMouseOver={() => setHoverBtn(true)} onMouseOut={() => setHoverBtn(false)}>
+            {!JSONloading && !secondaryLoading ? 
+              <>
+                <div className='bg-0'></div>
+                <div className='bg-0 bg2'></div>
+                <div className='bg-0 bg3'></div>
+              </> :
+              <>
+                <div className='bg'></div>
+                <div className='bg bg2'></div>
+                <div className='bg bg3'></div>
+              </>
+            }
+            {hoverBtn ? 
+              <Button color='secondary' variant='text' startIcon={<Icon>south_east</Icon>} size='large' className='req-btn'>
+                <span style={{fontSize: '.85em', cursor: 'pointer'}}>
+                  Search
+                </span>
+              </Button> : 
+              <Button disabled color='secondary' variant='text' startIcon={<Icon>south_east</Icon>} size='large' className='req-btn'>
+                <span style={{fontSize: '.85em', cursor: 'pointer'}}>
+                  Search
+                </span>
+              </Button>
+            }
+            <h2 style={{fontFamily: 'serif', fontSize: '1em', opacity: .5, cursor: 'pointer'}}>IMDb API</h2>
+          </Box>
+        </Grid>
       </Grid>
-    </Grid>
-    <Modal
-      open={openModal}
-      onClose={()=>setOpenModal(false)}
-      aria-labelledby='modal-modal-title'
-      aria-describedby='modal-modal-description'
-    > 
-      <Box display='flex' style={modalStyle} className='modal-style' id='modal-modal-description'>
-        <div>
-          <p className='genres-label'>Choose up to three genres</p>
-        </div>
-        <div style={{display:'flex'}}>
-          <div style={{flex: '1 50%'}}>
-            <p className='center right'>
-              {genreListCol1.map((genre, index) => {
-                return <Button onClick={()=>handleGenreList(genre, searchQuery)} style={{width: '150px', marginTop: '10px'}} className={searchQuery.includes(genre) ? 'select-btn-g' : ''} variant='outlined' key={String(index) + 'gen'}>{genre}</Button> 
-              })}
-            </p>
-          </div>
-          <div style={{flex: '1 50%'}}>
-            <p className='center left'>
-              {genreListCol2.map((genre, index) => {
-                return <Button onClick={()=>handleGenreList(genre, searchQuery)} style={{width: '150px', marginTop: '10px'}} className={searchQuery.includes(genre) ? 'select-btn-g' : ''} variant='outlined' key={String(index) + 'gen'}>{genre}</Button> 
-              })}
-            </p>
-          </div>
-        </div>
-      </Box>
-    </Modal></>
+      <CategoriesInput openModal={openModal} setOpenModal={setOpenModal} handleGenreList={handleGenreList} searchQuery={searchQuery}/>
+    </>
   )
 }
 

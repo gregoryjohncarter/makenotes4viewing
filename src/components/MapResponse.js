@@ -4,8 +4,8 @@ import Grid from '@mui/material/Grid';
 import Icon from '@mui/material/Icon';
 import Button from '@mui/material/Button';
 
-const MapResponse = memo(function MapResponse({currentResultsArr, setCurrentSel, JSONloading}) {
-  const ResItem = ({title, imdbID, type, index, count}) => {
+const MapResponse = memo(function MapResponse({currentResultsArr, setCurrentSel, JSONloading, currentPage, setCurrentPage, pageCount}) {
+  const ResItem = ({title, altTitle, imdbID, type, index, count}) => {
     const stylesWheel = ['#0b69b1', '#0277bd', '#0288d1', '#2a67cf', '#1976d2'];
     let alternation = 'grey';
     let textColor = 'lightgrey';
@@ -34,33 +34,37 @@ const MapResponse = memo(function MapResponse({currentResultsArr, setCurrentSel,
     }, timeVal);
 
     return (
-      !hideQueue && <div style={spanStyle} className='load-in'>
-        {count === 0 && <hr></hr>}
-        <span style={counterStyle}>
-          {count + 1}
-        </span>
-        <Button disabled variant='text'>
-          <span style={{color: stylesWheel[index]}} className='trim'>
-            {title}
+      !hideQueue && <>
+        <div style={spanStyle} className='load-in'>
+          {count === 0 && <hr></hr>}
+          <span style={counterStyle}>
+            {count + 1}
           </span>
-        </Button>
-        <hr>
-        </hr>
-      </div>
+          <Button disabled variant='text'>
+            <span style={{color: stylesWheel[index]}} className='trim'>
+              {title !== null && title}
+              {altTitle !== null && altTitle}
+            </span>
+          </Button>
+          <hr>
+          </hr>
+        </div>
+      </>
     )
   }
 
   return (
     <Grid container spacing={0} flexDirection='column' alignItems='start'>
       {!JSONloading && currentResultsArr.map((item, index) => {
+        let last = currentResultsArr.length - 1;
         let indexKey = index;
         if (index > 4) {
           index = index % 5;
         }
-        return <ResItem title={item.Title} index={index} count={indexKey} key={indexKey}/>
+        return <ResItem title={item.Title} altTitle={item.title} index={index} count={indexKey} key={indexKey} last={last}/>
       })}
     </Grid>
-  )
+  ) 
 })
 
 export default MapResponse;
