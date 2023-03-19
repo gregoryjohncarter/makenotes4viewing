@@ -8,38 +8,41 @@ import Icon from '@mui/material/Icon';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
-const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, searchQuery, setSearchQuery, enterSearchUtility, secondaryLoading, currentResultsArr, setFocusBar}) => {
+const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, searchQuery, setSearchQuery, enterSearchUtility, secondaryLoading, currentResultsArr, setFocusBar, genresAmt, setGenresAmt, genresArr, setGenresArr}) => {
   const [togglePallet, setTogglePallet] = useState(false);
-  const [genresAmt, setGenresAmt] = useState(0);
-  const [genresArr, setGenresArr] = useState([]);
 
   const switchMode = (current, direction) => {
     if (direction === 'forwards') {
       if (current === searchMode[3]) {
         setSearchType(searchMode[0]);
-      } else if (current === searchMode[0]) {
-        setSearchType(searchMode[1]);
-        setSearchQuery('');
-      } else {
-        let index = searchMode.indexOf(current);
-        setSearchQuery('');
-        setSearchType(searchMode[index + 1]);
-        setGenresAmt(0);
-        setGenresArr([]);
-      }
-    } else {
-      if (current === searchMode[0]) {
-        setSearchType(searchMode[3]);
         setSearchQuery('');
       } else if (current === searchMode[2]) {
-        setSearchType(searchMode[1]);
-        setSearchQuery('');
-      } else {
-        let index = searchMode.indexOf(current);
-        setSearchType(searchMode[index - 1]);
+        setSearchQuery('MostPopular');
+        setSearchType(searchMode[3]);
+      } else if (current === searchMode[1]) {
+        setSearchQuery('MostPopular');
+        setSearchType(searchMode[2]);
         setGenresAmt(0);
         setGenresArr([]);
+      } else {
+        setSearchType(searchMode[1]);
         setSearchQuery('');
+      }
+    } else {
+      if (current === searchMode[3]) {
+        setSearchType(searchMode[2]);
+        setSearchQuery('MostPopular');
+      } else if (current === searchMode[2]) {
+        setSearchQuery('');
+        setSearchType(searchMode[1]);
+      } else if (current === searchMode[1]) {
+        setSearchQuery('');
+        setSearchType(searchMode[0]);
+        setGenresAmt(0);
+        setGenresArr([]);
+      } else {
+        setSearchType(searchMode[3]);
+        setSearchQuery('MostPopular');
       }
     }
     if (!togglePallet) {
@@ -184,7 +187,7 @@ const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, searchQ
           </div>
         </Grid>
         <Grid item xs={4} alignSelf='center'>
-          <Box className='request-container' onClick={!currentResultsArr.length && !searchQuery.length ? () => setFocusBar('toggle') : () => enterSearchUtility(searchQuery, searchType, secondaryLoading)} onMouseOver={() => setHoverBtn(true)} onMouseOut={() => setHoverBtn(false)}>
+          <Box className='request-container' onClick={(!currentResultsArr.length && !searchQuery.length) ? () => setFocusBar('toggle') : () => enterSearchUtility(searchQuery, searchType, secondaryLoading)} onMouseOver={() => setHoverBtn(true)} onMouseOut={() => setHoverBtn(false)}>
             {!JSONloading && !secondaryLoading ? 
               <>
                 <div className='bg-0'></div>

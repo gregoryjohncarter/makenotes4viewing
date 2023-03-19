@@ -10,7 +10,7 @@ import Link from '@mui/material/Link';
 import Icon from '@mui/material/Icon';
 import Breadcrumbs from '@mui/joy/Breadcrumbs';
 
-const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, currentSelArr, breadcrumbQuery, focusBar, JSONloading, currentPage, setCurrentPage, pageCount, searchType, searchMode}) => {
+const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, currentSelArr, breadcrumbQuery, focusBar, JSONloading, currentPage, setCurrentPage, pageCount}) => {
   const [preDataFade, setPreDataFade] = useState(false);
 
   useEffect(() => {

@@ -4,8 +4,8 @@ import Grid from '@mui/material/Grid';
 import Icon from '@mui/material/Icon';
 import Button from '@mui/material/Button';
 
-const MapResponse = memo(function MapResponse({currentResultsArr, setCurrentSel, JSONloading, currentPage, setCurrentPage, pageCount}) {
-  const ResItem = ({title, altTitle, imdbID, type, index, count}) => {
+const MapResponse = memo(function MapResponse({currentResultsArr, setCurrentSel, JSONloading, currentPage}) {
+  const ResItem = ({title, altTitle, imdbID, type, index, count, currentPage}) => {
     const stylesWheel = ['#0b69b1', '#0277bd', '#0288d1', '#2a67cf', '#1976d2'];
     let alternation = 'grey';
     let textColor = 'lightgrey';
@@ -19,6 +19,7 @@ const MapResponse = memo(function MapResponse({currentResultsArr, setCurrentSel,
       height: '10px',
       padding: '8px',
       background: alternation,
+      fontFamily: 'Perpetua',
       border: '2px solid #666',
       color: textColor,
       textAlign: 'center',
@@ -32,13 +33,14 @@ const MapResponse = memo(function MapResponse({currentResultsArr, setCurrentSel,
     setTimeout(() => {
       setHideQueue(false);
     }, timeVal);
+    let countAdj = (currentPage * 30 - 30) + count;
 
     return (
       !hideQueue && <>
         <div style={spanStyle} className='load-in'>
           {count === 0 && <hr></hr>}
           <span style={counterStyle}>
-            {count + 1}
+            {countAdj + 1}
           </span>
           <Button disabled variant='text'>
             <span style={{color: stylesWheel[index]}} className='trim'>
@@ -56,12 +58,11 @@ const MapResponse = memo(function MapResponse({currentResultsArr, setCurrentSel,
   return (
     <Grid container spacing={0} flexDirection='column' alignItems='start'>
       {!JSONloading && currentResultsArr.map((item, index) => {
-        let last = currentResultsArr.length - 1;
         let indexKey = index;
         if (index > 4) {
           index = index % 5;
         }
-        return <ResItem title={item.Title} altTitle={item.title} index={index} count={indexKey} key={indexKey} last={last}/>
+        return <ResItem title={item.Title} altTitle={item.title} index={index} count={indexKey} key={indexKey} currentPage={currentPage}/>
       })}
     </Grid>
   ) 
