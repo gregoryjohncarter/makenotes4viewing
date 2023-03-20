@@ -40,13 +40,12 @@ const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, current
               {preDataFade ? 
                 <Box display='flex' justifyContent='center' style={{paddingTop: '80px'}}>
                   <Button size='small' className='fade-scale' variant='outlined' disabled>Begin by searching above</Button>
-                </Box> : <>
+                </Box> : !currentSelArr.length ? <>
                 <Breadcrumbs
                   separator='/'
                   size='md'
                 >
                   <Link
-                    href='/'
                     underline='hover'
                     color='neutral'
                     fontSize='inherit'
@@ -54,8 +53,48 @@ const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, current
                     <span className='crumb-results'><Icon>search</Icon>{breadcrumbQuery}</span>
                   </Link>
                 </Breadcrumbs>
-                <MapResponse currentResultsArr={currentResultsArr} setCurrentSel={setCurrentSel} JSONloading={JSONloading} currentPage={currentPage} setCurrentPage={setCurrentPage} pageCount={pageCount}/>
-              </>
+                <MapResponse
+                  currentResultsArr={currentResultsArr} 
+                  setCurrentSel={setCurrentSel} 
+                  JSONloading={JSONloading} 
+                  currentPage={currentPage} 
+                  setCurrentPage={setCurrentPage} 
+                  pageCount={pageCount}
+                />
+              </> : <>
+                <Breadcrumbs
+                  separator='/'
+                  size='md'
+                >
+                  <Link
+                    underline='hover'
+                    color='neutral'
+                    fontSize='inherit'
+                  >
+                    <span className='crumb-results'><Icon>search</Icon>{breadcrumbQuery}</span>
+                  </Link>
+                  <Link
+                    underline='hover'
+                    color='neutral'
+                    fontSize='inherit'
+                  >
+                    <span className='crumb-results'>{currentSelArr.Title}</span>
+                  </Link>
+                </Breadcrumbs>
+                <SelectionResults 
+                  title={currentSelArr.Title} 
+                  year={currentSelArr.Year} 
+                  contentRating={currentSelArr.Rated} 
+                  genre={currentSelArr.Genre} 
+                  stars={currentSelArr.Actors} 
+                  plot={currentSelArr.Plot} 
+                  poster={currentSelArr.Poster} 
+                  score={currentSelArr.Ratings} 
+                  type={currentSelArr.Type} 
+                  awards={currentSelArr.Awards}
+                  director={currentSelArr.Director}
+                  runtime={currentSelArr.Runtime}/>
+                </>
               }
             </div>
           </div>

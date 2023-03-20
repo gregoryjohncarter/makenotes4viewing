@@ -92,7 +92,7 @@ const Home = () => {
         }
         setJSONloading(true);
         searchByInput(searchQuery);
-        setCurrentSel('page-request');
+        setCurrentSel('single-request');
       } else {
         return
       }
@@ -193,10 +193,10 @@ const Home = () => {
   useEffect(() => {
     setGenresArr([]);
     setGenresAmt(0);
+    setCurrentSel('pages-request');
     if (latentResultsArr.length < 30) {
       setPageCount(1);
       setCurrentResultsArr(latentResultsArr);
-      setCurrentSel('page-request');
     } else {
       if (latentResultsArr.length % 30 === 0) {
         setPageCount(latentResultsArr.length / 30);
@@ -204,7 +204,6 @@ const Home = () => {
         setPageCount((Math.floor(latentResultsArr.length / 30)) + 1);
       }
       setCurrentResultsArr(latentResultsArr.slice(0, 30));
-      setCurrentSel('pages-request');
     }
   }, [latentResultsArr]);
 
@@ -263,7 +262,7 @@ const Home = () => {
         setCurrentPage={setCurrentPage}
         pageCount={pageCount}
       />
-      {latentResultsArr.length && currentSel === 'pages-request' ?
+      {latentResultsArr.length && currentSel === 'pages-request' && pageCount > 1 ?
         <Box display='flex' justifyContent='center'>
           <div style={{display: 'flex'}}>
             <Button theme={theme} variant='contained' color={currentPage === 1 ? 'neutral' : 'active'} onClick={currentPage === 1 ? () => console.log('') : () => setCurrentPage(currentPage - 1)} style={{width: '65px', marginTop: '10px'}}><Icon>navigate_before</Icon></Button>
