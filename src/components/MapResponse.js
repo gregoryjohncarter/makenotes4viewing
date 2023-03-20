@@ -48,6 +48,7 @@ const MapResponse = memo(function MapResponse({currentResultsArr, setCurrentSel,
               {altTitle !== null && altTitle}
             </span>
           </Button>
+          <Button variant='outlined' onClick={() => console.log(imdbID)} style={{width:'65px'}}>{type === 'movie' ? 'Film' : type === 'show' ? 'Show' : ''} info <Icon>arrow_right_alt</Icon></Button>
           <hr>
           </hr>
         </div>
@@ -62,7 +63,7 @@ const MapResponse = memo(function MapResponse({currentResultsArr, setCurrentSel,
         if (index > 4) {
           index = index % 5;
         }
-        return <ResItem title={item.Title} altTitle={item.title} index={index} count={indexKey} key={indexKey} currentPage={currentPage}/>
+        return <ResItem title={item.Title} altTitle={item.title} type={item.Type} imdbID={item.imdbID} index={index} count={indexKey} currentPage={currentPage} key={indexKey}/>
       })}
     </Grid>
   ) 

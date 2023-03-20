@@ -274,6 +274,11 @@ h2 {
   margin-top: 0px;
 }
 
+.source-score {
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Sans', sans-serif;
+  font-size: 12px;
+}
+
 /* iOS compatabilty styles */
 @supports (-webkit-touch-callout: none) {
   .body { 
@@ -351,5 +356,9 @@ h2 {
 
   .genres-label {
     font-size: 15px;
+  }
+
+  .source-score {
+    font-size: 10px;
   }
 }

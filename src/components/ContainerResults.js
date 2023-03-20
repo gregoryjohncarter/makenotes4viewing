@@ -10,7 +10,7 @@ import Link from '@mui/material/Link';
 import Icon from '@mui/material/Icon';
 import Breadcrumbs from '@mui/joy/Breadcrumbs';
 
-const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, currentSelArr, breadcrumbQuery, focusBar, JSONloading, currentPage, setCurrentPage, pageCount}) => {
+const ContainerResults = ({currentResultsArr, setCurrentSel, currentSelArr, breadcrumbQuery, focusBar, JSONloading, currentPage, setCurrentPage, pageCount}) => {
   const [preDataFade, setPreDataFade] = useState(false);
 
   useEffect(() => {
@@ -89,9 +89,8 @@ const ContainerResults = ({currentResultsArr, currentSel, setCurrentSel, current
                   stars={currentSelArr.Actors} 
                   plot={currentSelArr.Plot} 
                   poster={currentSelArr.Poster} 
-                  score={currentSelArr.Ratings} 
+                  rating={currentSelArr.Ratings} 
                   type={currentSelArr.Type} 
-                  awards={currentSelArr.Awards}
                   director={currentSelArr.Director}
                   runtime={currentSelArr.Runtime}/>
                 </>
