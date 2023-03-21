@@ -33,8 +33,22 @@ const Home = () => {
     }
   }, [currentResultsArr, latentResultsArr, currentSelArr]);
 
-  const [currentPage, setCurrentPage] = useState(false);
   const [detailDisplay, setDetailDisplay] = useState('init');
+
+  useEffect(() => {
+    if (currentResultsArr.length > 0) {
+      if (detailDisplay === 'init') {
+        setDetailDisplay('home');
+        setTimeout(() => {
+          setDetailDisplay('search');
+        }, 1250);
+      } else {
+        setDetailDisplay('search');
+      }
+    }
+  }, [currentResultsArr]);
+
+  const [currentPage, setCurrentPage] = useState(false);
 
   useEffect(() => {
     if (JSONloading) {
@@ -42,7 +56,7 @@ const Home = () => {
         setJSONloading(false);
       }, 1800);
     }
-  }, [JSONloading])
+  }, [JSONloading]);
 
   const [focusBar, setFocusBar] = useState(false);
 
@@ -77,9 +91,6 @@ const Home = () => {
               let transferResults = (data) => {
                 setCurrentResultsArr(data.Search);
               }
-              if (detailDisplay === 'init') {
-                setDetailDisplay('home');
-              }
               setBreadcrumbQuery(searchQuery);
               transferResults(dataResults);
             } else {
@@ -112,9 +123,6 @@ const Home = () => {
             if (dataResults.results.length > 0) {
               let transferResults = (data) => {
                 setLatentResultsArr(data.results);
-              }
-              if (detailDisplay === 'init') {
-                setDetailDisplay('home');
               }
               setBreadcrumbQuery(searchQuery);
               transferResults(dataResults);
@@ -149,9 +157,6 @@ const Home = () => {
               let transferResults = (data) => {
                 setLatentResultsArr(data.items);
               }
-              if (detailDisplay === 'init') {
-                setDetailDisplay('home');
-              }
               setBreadcrumbQuery('Top 100 - TV');
               transferResults(dataResults);
             } else {
@@ -183,9 +188,6 @@ const Home = () => {
               let transferResults = (data) => {
                 setLatentResultsArr(data.items);
               }
-              if (detailDisplay === 'init') {
-                setDetailDisplay('home');
-              }
               setBreadcrumbQuery('Top 100 - Film');
               transferResults(dataResults);
             } else {
@@ -208,7 +210,17 @@ const Home = () => {
     setSearchQuery('');
   }
 
-  const [selectionDisplay, setSelectionDisplay] = useState(false);
+  useEffect(() => {
+    if (currentResultsArr.length > 0) {
+      if (currentSelArr) {
+        setTimeout(() => {
+          setDetailDisplay('detail');
+        }, 1250);
+      } else {
+        setDetailDisplay('search');
+      }
+    }
+  }, [currentSelArr]);
 
   const requestSelectionInfo = useCallback(async (idIMDB) => {
     setDetailDisplay(idIMDB);
@@ -219,15 +231,12 @@ const Home = () => {
       let transferResults = (data) => {
         setCurrentSelArr(data);
       }
-      setTimeout(() => {
-        setSelectionDisplay(true);
-      }, 1500);
       transferResults(dataResults);
     } catch (error) {
       console.log(error);
       setBreadcrumbQuery('Request failed');
     }
-  }, [setBreadcrumbQuery, setDetailDisplay, setCurrentSelArr, setSelectionDisplay]);
+  }, [setBreadcrumbQuery, setDetailDisplay, setCurrentSelArr]);
 
   const [pageCount, setPageCount] = useState(false);
 
@@ -276,8 +285,6 @@ const Home = () => {
     },
   });
 
-  console.log(detailDisplay);
-
   return (
     <Container maxWidth='md' style={{marginBottom: '25px'}}>
       <FormSearch 
@@ -312,8 +319,6 @@ const Home = () => {
         requestSelectionInfo={requestSelectionInfo}
         detailDisplay={detailDisplay}
         setDetailDisplay={setDetailDisplay}
-        selectionDisplay={selectionDisplay}
-        setSelectionDisplay={setSelectionDisplay}
       />
       {latentResultsArr.length && currentSel === 'pages-request' && pageCount > 1 && !currentSelArr ?
         <Box display='flex' justifyContent='center'>

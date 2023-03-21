@@ -413,6 +413,18 @@ h3 {
   color: #282828;
 }
 
+img {
+  margin-top: -50px;
+  box-shadow: 5px -2px 2px #799b9b;
+  border-bottom:6.5px solid #1b1257;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+ol {
+  margin-left: -15px !important;
+}
+
 /* iOS compatabilty styles */
 @supports (-webkit-touch-callout: none) {
   .body { 
@@ -510,5 +522,9 @@ h3 {
 
   h3 {
     margin: 10px;
+  }
+
+  img {
+    margin-left: 5px;
   }
 }

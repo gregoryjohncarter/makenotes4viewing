@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import SelectionResults from '../components/SelectionResults.js';
 import MapResponse from '../components/MapResponse.js';
@@ -24,26 +24,13 @@ const ContainerResults = ({
   pageCount, 
   requestSelectionInfo, 
   detailDisplay, 
-  setDetailDisplay,
-  selectionDisplay,
-  setSelectionDisplay
+  setDetailDisplay
 }) => {
-
-  useEffect(() => {
-    if (detailDisplay !== 'search') {
-      setTimeout(() => {
-        setDetailDisplay('search');
-      }, 1250); 
-    }
-  }, [currentResultsArr]);
 
   const handleBack = () => {
     setCurrentSelArr(false);
     setDetailDisplay('search');
-    setSelectionDisplay(false);
   }
-
-  console.log(detailDisplay);
 
   return (
     <Grid container rowSpacing={2}>
@@ -62,7 +49,7 @@ const ContainerResults = ({
               {detailDisplay === 'home' ? 
                 <Box display='flex' justifyContent='center' style={{paddingTop: '80px'}}>
                   <Button size='small' className='fade-scale' variant='outlined' disabled>Begin by searching above</Button>
-                </Box> : detailDisplay === 'search' ? <>
+                </Box> : detailDisplay === 'search' || detailDisplay === currentSelArr.imdbID ? <>
                 <Breadcrumbs
                   separator='/'
                   size='md'
@@ -87,7 +74,7 @@ const ContainerResults = ({
                   setDetailDisplay={setDetailDisplay}
                   detailDisplay={detailDisplay}
                 />
-              </> : selectionDisplay && currentSelArr ? <>
+              </> : <>
                 <Breadcrumbs
                   separator='/'
                   size='md'
@@ -98,7 +85,7 @@ const ContainerResults = ({
                     color='neutral'
                     fontSize='inherit'
                   >
-                    <Button variant='text' onClick={() => handleBack()}><span className='crumb-results'><Icon>search</Icon>{breadcrumbQuery}</span></Button>
+                    <Button variant='text' onClick={handleBack}><span className='crumb-results'><Icon>search</Icon>{breadcrumbQuery}</span></Button>
                   </Link>
                   <Link
                     underline='hover'
@@ -119,7 +106,7 @@ const ContainerResults = ({
                   rating={currentSelArr.Ratings} 
                   director={currentSelArr.Director}
                   runtime={currentSelArr.Runtime}/>
-                </> : <></>
+                </>
               }
             </div>
           </div>
