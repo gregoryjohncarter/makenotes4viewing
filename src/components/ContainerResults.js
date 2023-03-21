@@ -10,37 +10,59 @@ import Link from '@mui/material/Link';
 import Icon from '@mui/material/Icon';
 import Breadcrumbs from '@mui/joy/Breadcrumbs';
 
-const ContainerResults = ({currentResultsArr, setCurrentSel, currentSelArr, breadcrumbQuery, focusBar, JSONloading, currentPage, setCurrentPage, pageCount}) => {
-  const [preDataFade, setPreDataFade] = useState(false);
+const ContainerResults = ({
+  currentResultsArr, 
+  setCurrentSel, 
+  currentSelArr, 
+  setCurrentSelArr, 
+  breadcrumbQuery, 
+  focusBar, 
+  JSONloading, 
+  secondaryLoading, 
+  currentPage, 
+  setCurrentPage, 
+  pageCount, 
+  requestSelectionInfo, 
+  detailDisplay, 
+  setDetailDisplay,
+  selectionDisplay,
+  setSelectionDisplay
+}) => {
 
   useEffect(() => {
-    if (!currentResultsArr.length) {
-      setPreDataFade(true);
-    } else {
+    if (detailDisplay !== 'search') {
       setTimeout(() => {
-        setPreDataFade(false);
-      }, 1000);
+        setDetailDisplay('search');
+      }, 1250); 
     }
   }, [currentResultsArr]);
+
+  const handleBack = () => {
+    setCurrentSelArr(false);
+    setDetailDisplay('search');
+    setSelectionDisplay(false);
+  }
+
+  console.log(detailDisplay);
 
   return (
     <Grid container rowSpacing={2}>
       <Grid item xs={12}>
-        {!currentResultsArr.length ? 
+        {detailDisplay === 'init' ? 
           <div className='results-div-e'>
             <div className='results-inner-div-e'>
               <Box display='flex' className={focusBar === 'toggle' ? 'wo-input' : ''} justifyContent='center' style={{paddingTop: '80px'}}>
-                <Button size='small' variant='outlined' disabled>Begin by searching above</Button>
+                <Button size='small' variant='outlined' disabled>{!breadcrumbQuery ? 'Begin by searching above' : breadcrumbQuery}</Button>
               </Box>
             </div>
           </div>
            :
           <div className='results-div'>
             <div className='results-inner-div'>
-              {preDataFade ? 
+              {detailDisplay === 'home' ? 
                 <Box display='flex' justifyContent='center' style={{paddingTop: '80px'}}>
                   <Button size='small' className='fade-scale' variant='outlined' disabled>Begin by searching above</Button>
-                </Box> : !currentSelArr.length ? <>
+                </Box> : detailDisplay === 'search' ? <>
                 <Breadcrumbs
                   separator='/'
                   size='md'
@@ -60,18 +82,23 @@ const ContainerResults = ({currentResultsArr, setCurrentSel, currentSelArr, brea
                   currentPage={currentPage} 
                   setCurrentPage={setCurrentPage} 
                   pageCount={pageCount}
+                  secondaryLoading={secondaryLoading}
+                  requestSelectionInfo={requestSelectionInfo}
+                  setDetailDisplay={setDetailDisplay}
+                  detailDisplay={detailDisplay}
                 />
-              </> : <>
+              </> : selectionDisplay && currentSelArr ? <>
                 <Breadcrumbs
                   separator='/'
                   size='md'
+                  aria-label='breadcrumb'
                 >
                   <Link
                     underline='hover'
                     color='neutral'
                     fontSize='inherit'
                   >
-                    <span className='crumb-results'><Icon>search</Icon>{breadcrumbQuery}</span>
+                    <Button variant='text' onClick={() => handleBack()}><span className='crumb-results'><Icon>search</Icon>{breadcrumbQuery}</span></Button>
                   </Link>
                   <Link
                     underline='hover'
@@ -90,10 +117,9 @@ const ContainerResults = ({currentResultsArr, setCurrentSel, currentSelArr, brea
                   plot={currentSelArr.Plot} 
                   poster={currentSelArr.Poster} 
                   rating={currentSelArr.Ratings} 
-                  type={currentSelArr.Type} 
                   director={currentSelArr.Director}
                   runtime={currentSelArr.Runtime}/>
-                </>
+                </> : <></>
               }
             </div>
           </div>

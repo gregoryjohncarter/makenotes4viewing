@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import FormSearch from '../components/FormSearch.js';
 import ContainerResults from '../components/ContainerResults.js';
@@ -24,16 +24,17 @@ const Home = () => {
 
   const [currentResultsArr, setCurrentResultsArr] = useState(false);
   const [currentSel, setCurrentSel] = useState([]);
-  const [currentSelArr, setCurrentSelArr] = useState([]);
+  const [currentSelArr, setCurrentSelArr] = useState(false);
   const [latentResultsArr, setLatentResultsArr] = useState([]);
 
   useEffect(() => {
     if (secondaryLoading) {
       setSecondaryLoading(false);
     }
-  }, [currentResultsArr, latentResultsArr]);
+  }, [currentResultsArr, latentResultsArr, currentSelArr]);
 
   const [currentPage, setCurrentPage] = useState(false);
+  const [detailDisplay, setDetailDisplay] = useState('init');
 
   useEffect(() => {
     if (JSONloading) {
@@ -41,7 +42,6 @@ const Home = () => {
         setJSONloading(false);
       }, 1800);
     }
-    setCurrentPage(1);
   }, [JSONloading])
 
   const [focusBar, setFocusBar] = useState(false);
@@ -77,6 +77,9 @@ const Home = () => {
               let transferResults = (data) => {
                 setCurrentResultsArr(data.Search);
               }
+              if (detailDisplay === 'init') {
+                setDetailDisplay('home');
+              }
               setBreadcrumbQuery(searchQuery);
               transferResults(dataResults);
             } else {
@@ -90,7 +93,9 @@ const Home = () => {
             setCurrentResultsArr([]);
           }
         }
+        setCurrentPage(1);
         setJSONloading(true);
+        setCurrentSelArr(false);
         searchByInput(searchQuery);
         setCurrentSel('single-request');
       } else {
@@ -108,6 +113,9 @@ const Home = () => {
               let transferResults = (data) => {
                 setLatentResultsArr(data.results);
               }
+              if (detailDisplay === 'init') {
+                setDetailDisplay('home');
+              }
               setBreadcrumbQuery(searchQuery);
               transferResults(dataResults);
             } else {
@@ -121,7 +129,9 @@ const Home = () => {
             setCurrentResultsArr([]);
           }
         }
+        setCurrentPage(1);
         setJSONloading(true);
+        setCurrentSelArr(false);
         searchByLabel(searchQuery);
       } else {
         return
@@ -139,6 +149,9 @@ const Home = () => {
               let transferResults = (data) => {
                 setLatentResultsArr(data.items);
               }
+              if (detailDisplay === 'init') {
+                setDetailDisplay('home');
+              }
               setBreadcrumbQuery('Top 100 - TV');
               transferResults(dataResults);
             } else {
@@ -152,7 +165,9 @@ const Home = () => {
             setCurrentResultsArr([]);
           }
         }
+        setCurrentPage(1);
         setJSONloading(true);
+        setCurrentSelArr(false);
         searchByChartT(searchQuery);
       }
     } else {
@@ -168,6 +183,9 @@ const Home = () => {
               let transferResults = (data) => {
                 setLatentResultsArr(data.items);
               }
+              if (detailDisplay === 'init') {
+                setDetailDisplay('home');
+              }
               setBreadcrumbQuery('Top 100 - Film');
               transferResults(dataResults);
             } else {
@@ -181,16 +199,40 @@ const Home = () => {
             setCurrentResultsArr([]);
           }
         }
+        setCurrentPage(1);
         setJSONloading(true);
+        setCurrentSelArr(false);
         searchByChartF(searchQuery);
       }
     }
     setSearchQuery('');
   }
 
+  const [selectionDisplay, setSelectionDisplay] = useState(false);
+
+  const requestSelectionInfo = useCallback(async (idIMDB) => {
+    setDetailDisplay(idIMDB);
+    var apiUrlSelection = "https://www.omdbapi.com/?apikey=" + process.env.REACT_APP_REQUESTHOMEKEY + "&i=" + idIMDB + "&plot=full";
+    try {
+      let selectionRequest = await fetch(apiUrlSelection);
+      let dataResults = await selectionRequest.json();
+      let transferResults = (data) => {
+        setCurrentSelArr(data);
+      }
+      setTimeout(() => {
+        setSelectionDisplay(true);
+      }, 1500);
+      transferResults(dataResults);
+    } catch (error) {
+      console.log(error);
+      setBreadcrumbQuery('Request failed');
+    }
+  }, [setBreadcrumbQuery, setDetailDisplay, setCurrentSelArr, setSelectionDisplay]);
+
   const [pageCount, setPageCount] = useState(false);
 
   useEffect(() => {
+    setCurrentSelArr(false);
     setGenresArr([]);
     setGenresAmt(0);
     setCurrentSel('pages-request');
@@ -208,14 +250,16 @@ const Home = () => {
   }, [latentResultsArr]);
 
   useEffect(() => {
-    if (latentResultsArr.length) {
-      let left = 0;
-      let right = 30;
-      
-      right = currentPage * right;
-      left = right - 30;
-      let newSelection = latentResultsArr.slice(left, right);
-      setCurrentResultsArr(newSelection);
+    if (currentSel !== 'single-request') {
+      if (latentResultsArr.length) {
+        let left = 0;
+        let right = 30;
+        
+        right = currentPage * right;
+        left = right - 30;
+        let newSelection = latentResultsArr.slice(left, right);
+        setCurrentResultsArr(newSelection);
+      }
     }
   }, [currentPage]);
 
@@ -231,6 +275,8 @@ const Home = () => {
       }
     },
   });
+
+  console.log(detailDisplay);
 
   return (
     <Container maxWidth='md' style={{marginBottom: '25px'}}>
@@ -255,14 +301,21 @@ const Home = () => {
         currentSel={currentSel}
         setCurrentSel={setCurrentSel}
         currentSelArr={currentSelArr}
+        setCurrentSelArr={setCurrentSelArr}
         breadcrumbQuery={breadcrumbQuery}
         focusBar={focusBar}
         JSONloading={JSONloading}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         pageCount={pageCount}
+        secondaryLoading={secondaryLoading}
+        requestSelectionInfo={requestSelectionInfo}
+        detailDisplay={detailDisplay}
+        setDetailDisplay={setDetailDisplay}
+        selectionDisplay={selectionDisplay}
+        setSelectionDisplay={setSelectionDisplay}
       />
-      {latentResultsArr.length && currentSel === 'pages-request' && pageCount > 1 ?
+      {latentResultsArr.length && currentSel === 'pages-request' && pageCount > 1 && !currentSelArr ?
         <Box display='flex' justifyContent='center'>
           <div style={{display: 'flex'}}>
             <Button theme={theme} variant='contained' color={currentPage === 1 ? 'neutral' : 'active'} onClick={currentPage === 1 ? () => console.log('') : () => setCurrentPage(currentPage - 1)} style={{width: '65px', marginTop: '10px'}}><Icon>navigate_before</Icon></Button>
