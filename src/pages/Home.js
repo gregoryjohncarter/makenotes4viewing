@@ -31,7 +31,7 @@ const Home = () => {
     if (secondaryLoading) {
       setSecondaryLoading(false);
     }
-  }, [currentResultsArr, latentResultsArr, currentSelArr]);
+  }, [currentResultsArr, latentResultsArr]);
 
   const [detailDisplay, setDetailDisplay] = useState('init');
 
@@ -54,7 +54,7 @@ const Home = () => {
     if (JSONloading) {
       setTimeout(() => {
         setJSONloading(false);
-      }, 1800);
+      }, 2200);
     }
   }, [JSONloading]);
 
@@ -215,6 +215,7 @@ const Home = () => {
       if (currentSelArr) {
         setTimeout(() => {
           setDetailDisplay('detail');
+          setSecondaryLoading(false);
         }, 1250);
       } else {
         setDetailDisplay('search');
@@ -223,6 +224,9 @@ const Home = () => {
   }, [currentSelArr]);
 
   const requestSelectionInfo = useCallback(async (idIMDB) => {
+    if (secondaryLoading) {
+      return
+    }
     setDetailDisplay(idIMDB);
     var apiUrlSelection = "https://www.omdbapi.com/?apikey=" + process.env.REACT_APP_REQUESTHOMEKEY + "&i=" + idIMDB + "&plot=full";
     try {
@@ -236,7 +240,7 @@ const Home = () => {
       console.log(error);
       setBreadcrumbQuery('Request failed');
     }
-  }, [setBreadcrumbQuery, setDetailDisplay, setCurrentSelArr]);
+  }, [setBreadcrumbQuery, setDetailDisplay, setCurrentSelArr, secondaryLoading]);
 
   const [pageCount, setPageCount] = useState(false);
 

@@ -1,11 +1,11 @@
-import React, { useState, memo } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 
 import Grid from '@mui/material/Grid';
 import Icon from '@mui/material/Icon';
 import Button from '@mui/material/Button';
 
-const MapResponse = memo(function MapResponse({currentResultsArr, JSONloading, secondaryLoading, currentPage, requestSelectionInfo, detailDisplay}) {
-  const ResItem = ({title, altTitle, imdbID, altID, index, count, currentPage, detailDisplay}) => {
+const MapResponse = memo(function MapResponse({currentResultsArr, JSONloading, currentPage, requestSelectionInfo, detailDisplay, secondaryLoading}) {
+  const ResItem = memo(function ResItem({title, altTitle, imdbID, altID, index, count, currentPage, detailDisplay, secondaryLoading}) {
     const stylesWheel = ['#0b69b1', '#0277bd', '#0288d1', '#2a67cf', '#1976d2'];
     let alternation = 'grey';
     let textColor = 'lightgrey';
@@ -29,10 +29,17 @@ const MapResponse = memo(function MapResponse({currentResultsArr, JSONloading, s
       '--i': `${count}`
     };
     const [hideQueue, setHideQueue] = useState(true);
-    let timeVal = count * 122;
-    setTimeout(() => {
-      setHideQueue(false);
-    }, timeVal);
+    
+    useEffect(() => {
+      if (detailDisplay !== 'search') {
+        setHideQueue(false);
+      } else {
+        let timeVal = count * 122;
+        setTimeout(() => {
+          setHideQueue(false);
+        }, timeVal);
+      }
+    }, []);
     let countAdj = (currentPage * 30 - 30) + count;
 
     return (
@@ -49,7 +56,7 @@ const MapResponse = memo(function MapResponse({currentResultsArr, JSONloading, s
             </span>
           </Button>
           <Button variant='outlined' 
-            disabled={JSONloading || secondaryLoading || detailDisplay === imdbID} 
+            disabled={detailDisplay === imdbID || secondaryLoading} 
             onClick={imdbID === undefined ? () => requestSelectionInfo(altID) : () => requestSelectionInfo(imdbID)} 
             style={{width:'85px'}}
           >
@@ -70,11 +77,11 @@ const MapResponse = memo(function MapResponse({currentResultsArr, JSONloading, s
         </div>
       </>
     )
-  }
+  });
 
   return (
     <Grid container spacing={0} flexDirection='column' alignItems='start'>
-      {!JSONloading && !secondaryLoading ? currentResultsArr.map((item, index) => {
+      {!JSONloading ? currentResultsArr.map((item, index) => {
         let indexKey = index;
         if (index > 4) {
           index = index % 5;
@@ -89,6 +96,7 @@ const MapResponse = memo(function MapResponse({currentResultsArr, JSONloading, s
           currentPage={currentPage} 
           detailDisplay={detailDisplay} 
           key={indexKey}
+          secondaryLoading={secondaryLoading}
         />
       }) : <></>}
     </Grid>

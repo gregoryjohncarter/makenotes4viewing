@@ -18,13 +18,13 @@ const ContainerResults = ({
   breadcrumbQuery, 
   focusBar, 
   JSONloading, 
-  secondaryLoading, 
   currentPage, 
   setCurrentPage, 
   pageCount, 
   requestSelectionInfo, 
   detailDisplay, 
-  setDetailDisplay
+  setDetailDisplay,
+  secondaryLoading
 }) => {
 
   const handleBack = () => {
@@ -69,10 +69,10 @@ const ContainerResults = ({
                   currentPage={currentPage} 
                   setCurrentPage={setCurrentPage} 
                   pageCount={pageCount}
-                  secondaryLoading={secondaryLoading}
                   requestSelectionInfo={requestSelectionInfo}
                   setDetailDisplay={setDetailDisplay}
                   detailDisplay={detailDisplay}
+                  secondaryLoading={secondaryLoading}
                 />
               </> : <>
                 <Breadcrumbs
