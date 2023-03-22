@@ -73,144 +73,150 @@ const Home = () => {
   const [genresAmt, setGenresAmt] = useState(0);
   const [genresArr, setGenresArr] = useState([]);
 
-  const enterSearchUtility = (searchQuery, searchType, loading) => {
-    if (loading) {
-      return
-    }
-    if (searchQuery.trim().length || (searchType === searchMode[2] && searchQuery.length) || (searchType === searchMode[3] && searchQuery.length)) {
-      setSecondaryLoading(true);
-    }
-    if (searchType === searchMode[0]) {
-      searchQuery = searchQuery.trim('');
-      if (searchQuery) {
-        const searchByInput = async (searchQuery) => {
-          let apiUrlTitle = "https://www.omdbapi.com/?apikey=" + process.env.REACT_APP_REQUESTHOMEKEY + "&s=" + searchQuery;
-          try {
-            let nearTermResults = await fetch(apiUrlTitle);
-            let dataResults = await nearTermResults.json();
-            if (dataResults.Response === 'True') {
-              let transferResults = (data) => {
-                setCurrentResultsArr(data.Search);
-              }
-              setBreadcrumbQuery(searchQuery);
-              transferResults(dataResults);
-            } else {
-              setBreadcrumbQuery('No results found');
-              setCurrentResultsArr([]);
-              return
-            }
-          } catch (error) {
-            console.log(error);
-            setBreadcrumbQuery('Request failed');
-            setCurrentResultsArr([]);
-          }
-        }
-        setCurrentPage(1);
-        setJSONloading(true);
-        setCurrentSelArr(false);
-        searchByInput(searchQuery);
-        setCurrentSel('single-request');
-      } else {
-        return
-      }
-    } else if (searchType === searchMode[1]) {
-      if (searchQuery) {
-        const searchByLabel = async (searchQuery) => {
-          let apiUrlGenre = "https://imdb-api.com/API/AdvancedSearch/" + process.env.REACT_APP_REQUESTACCKEY + "/?genres=" + searchQuery + "&count=150";
-          apiUrlGenre = apiUrlGenre.replace(/ /g, '');
-          try {
-            let nearLabelsResults = await fetch(apiUrlGenre);
-            let dataResults = await nearLabelsResults.json();
-            if (dataResults.results.length > 0) {
-              let transferResults = (data) => {
-                setLatentResultsArr(data.results);
-              }
-              setBreadcrumbQuery(searchQuery);
-              transferResults(dataResults);
-            } else {
-              setBreadcrumbQuery('No results found');
-              setCurrentResultsArr([]);
-              return
-            }
-          } catch (error) {
-            console.log(error);
-            setBreadcrumbQuery('Request failed');
-            setCurrentResultsArr([]);
-          }
-        }
-        setCurrentPage(1);
-        setJSONloading(true);
-        setCurrentSelArr(false);
-        searchByLabel(searchQuery);
-      } else {
-        return
-      }
-    } else if (searchType === searchMode[2]) {
-      if (searchQuery) {
-        let filmString = 'TVs';
-        searchQuery += filmString;
-        const searchByChartT = async (searchQuery) => {
-          let apiMostPopular = "https://imdb-api.com/en/API/" + searchQuery + "/" + process.env.REACT_APP_REQUESTACCKEY;
-          try {
-            let nearAcclaimResults = await fetch(apiMostPopular);
-            let dataResults = await nearAcclaimResults.json();
-            if (dataResults.errorMessage === '') {
-              let transferResults = (data) => {
-                setLatentResultsArr(data.items);
-              }
-              setBreadcrumbQuery('Top 100 - TV');
-              transferResults(dataResults);
-            } else {
-              setBreadcrumbQuery('Error from request');
-              setCurrentResultsArr([]);
-              return
-            }
-          } catch (error) {
-            console.log(error);
-            setBreadcrumbQuery('Request failed');
-            setCurrentResultsArr([]);
-          }
-        }
-        setCurrentPage(1);
-        setJSONloading(true);
-        setCurrentSelArr(false);
-        searchByChartT(searchQuery);
-      }
-    } else {
-      if (searchQuery) {
-        let filmString = 'Movies';
-        searchQuery += filmString;
-        const searchByChartF = async (searchQuery) => {
-          let apiMostPopular = "https://imdb-api.com/en/API/" + searchQuery + "/" + process.env.REACT_APP_REQUESTACCKEY;
-          try {
-            let nearAcclaimResults = await fetch(apiMostPopular);
-            let dataResults = await nearAcclaimResults.json();
-            if (dataResults.errorMessage === '') {
-              let transferResults = (data) => {
-                setLatentResultsArr(data.items);
-              }
-              setBreadcrumbQuery('Top 100 - Film');
-              transferResults(dataResults);
-            } else {
-              setBreadcrumbQuery('Error from request');
-              setCurrentResultsArr([]);
-              return
-            }
-          } catch (error) {
-            console.log(error);
-            setBreadcrumbQuery('Request failed');
-            setCurrentResultsArr([]);
-          }
-        }
-        setCurrentPage(1);
-        setJSONloading(true);
-        setCurrentSelArr(false);
-        searchByChartF(searchQuery);
-      }
-    }
-    setSearchQuery('');
-  }
+  const handleSearchUtility = (e, searchQuery, searchType, loading) => {
+    e.stopPropogation();
+    e.preventDefault();
 
+    const enterSearchUtility = (searchQuery, searchType, loading) => {
+      if (loading) {
+        return
+      }
+      if (searchQuery.trim().length || (searchType === searchMode[2] && searchQuery.length) || (searchType === searchMode[3] && searchQuery.length)) {
+        setSecondaryLoading(true);
+      }
+      if (searchType === searchMode[0]) {
+        searchQuery = searchQuery.trim('');
+        if (searchQuery) {
+          const searchByInput = async (searchQuery) => {
+            let apiUrlTitle = "https://www.omdbapi.com/?apikey=" + process.env.REACT_APP_REQUESTHOMEKEY + "&s=" + searchQuery;
+            try {
+              let nearTermResults = await fetch(apiUrlTitle);
+              let dataResults = await nearTermResults.json();
+              if (dataResults.Response === 'True') {
+                let transferResults = (data) => {
+                  setCurrentResultsArr(data.Search);
+                }
+                setBreadcrumbQuery(searchQuery);
+                transferResults(dataResults);
+              } else {
+                setBreadcrumbQuery('No results found');
+                setCurrentResultsArr([]);
+                return
+              }
+            } catch (error) {
+              console.log(error);
+              setBreadcrumbQuery('Request failed');
+              setCurrentResultsArr([]);
+            }
+          }
+          setCurrentPage(1);
+          setJSONloading(true);
+          setCurrentSelArr(false);
+          searchByInput(searchQuery);
+          setCurrentSel('single-request');
+        } else {
+          return
+        }
+      } else if (searchType === searchMode[1]) {
+        if (searchQuery) {
+          const searchByLabel = async (searchQuery) => {
+            let apiUrlGenre = "https://imdb-api.com/API/AdvancedSearch/" + process.env.REACT_APP_REQUESTACCKEY + "/?genres=" + searchQuery + "&count=150";
+            apiUrlGenre = apiUrlGenre.replace(/ /g, '');
+            try {
+              let nearLabelsResults = await fetch(apiUrlGenre);
+              let dataResults = await nearLabelsResults.json();
+              if (dataResults.results.length > 0) {
+                let transferResults = (data) => {
+                  setLatentResultsArr(data.results);
+                }
+                setBreadcrumbQuery(searchQuery);
+                transferResults(dataResults);
+              } else {
+                setBreadcrumbQuery('No results found');
+                setCurrentResultsArr([]);
+                return
+              }
+            } catch (error) {
+              console.log(error);
+              setBreadcrumbQuery('Request failed');
+              setCurrentResultsArr([]);
+            }
+          }
+          setCurrentPage(1);
+          setJSONloading(true);
+          setCurrentSelArr(false);
+          searchByLabel(searchQuery);
+        } else {
+          return
+        }
+      } else if (searchType === searchMode[2]) {
+        if (searchQuery) {
+          let filmString = 'TVs';
+          searchQuery += filmString;
+          const searchByChartT = async (searchQuery) => {
+            let apiMostPopular = "https://imdb-api.com/en/API/" + searchQuery + "/" + process.env.REACT_APP_REQUESTACCKEY;
+            try {
+              let nearAcclaimResults = await fetch(apiMostPopular);
+              let dataResults = await nearAcclaimResults.json();
+              if (dataResults.errorMessage === '') {
+                let transferResults = (data) => {
+                  setLatentResultsArr(data.items);
+                }
+                setBreadcrumbQuery('Top 100 - TV');
+                transferResults(dataResults);
+              } else {
+                setBreadcrumbQuery('Error from request');
+                setCurrentResultsArr([]);
+                return
+              }
+            } catch (error) {
+              console.log(error);
+              setBreadcrumbQuery('Request failed');
+              setCurrentResultsArr([]);
+            }
+          }
+          setCurrentPage(1);
+          setJSONloading(true);
+          setCurrentSelArr(false);
+          searchByChartT(searchQuery);
+        }
+      } else {
+        if (searchQuery) {
+          let filmString = 'Movies';
+          searchQuery += filmString;
+          const searchByChartF = async (searchQuery) => {
+            let apiMostPopular = "https://imdb-api.com/en/API/" + searchQuery + "/" + process.env.REACT_APP_REQUESTACCKEY;
+            try {
+              let nearAcclaimResults = await fetch(apiMostPopular);
+              let dataResults = await nearAcclaimResults.json();
+              if (dataResults.errorMessage === '') {
+                let transferResults = (data) => {
+                  setLatentResultsArr(data.items);
+                }
+                setBreadcrumbQuery('Top 100 - Film');
+                transferResults(dataResults);
+              } else {
+                setBreadcrumbQuery('Error from request');
+                setCurrentResultsArr([]);
+                return
+              }
+            } catch (error) {
+              console.log(error);
+              setBreadcrumbQuery('Request failed');
+              setCurrentResultsArr([]);
+            }
+          }
+          setCurrentPage(1);
+          setJSONloading(true);
+          setCurrentSelArr(false);
+          searchByChartF(searchQuery);
+        }
+      }
+      setSearchQuery('');
+    }
+    enterSearchUtility(searchQuery, searchType, loading);
+  }
+  
   useEffect(() => {
     if (currentResultsArr.length > 0) {
       if (currentSelArr) {
@@ -300,7 +306,7 @@ const Home = () => {
         JSONloading={JSONloading} 
         setSearchQuery={setSearchQuery}
         searchQuery={searchQuery}
-        enterSearchUtility={enterSearchUtility}
+        handleSearchUtility={handleSearchUtility}
         secondaryLoading={secondaryLoading}
         currentResultsArr={currentResultsArr}
         setFocusBar={setFocusBar}

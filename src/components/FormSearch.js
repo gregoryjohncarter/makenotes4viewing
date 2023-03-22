@@ -15,7 +15,7 @@ const FormSearch = ({
   JSONloading, 
   searchQuery, 
   setSearchQuery, 
-  enterSearchUtility, 
+  handleSearchUtility, 
   secondaryLoading, 
   currentResultsArr, 
   setFocusBar, 
@@ -26,48 +26,54 @@ const FormSearch = ({
 }) => {
   const [togglePallet, setTogglePallet] = useState(false);
 
-  const switchMode = (current, direction) => {
-    if (direction === 'forwards') {
-      if (current === searchMode[3]) {
-        setSearchType(searchMode[0]);
-        setSearchQuery('');
-      } else if (current === searchMode[2]) {
-        setSearchQuery('MostPopular');
-        setSearchType(searchMode[3]);
-      } else if (current === searchMode[1]) {
-        setSearchQuery('MostPopular');
-        setSearchType(searchMode[2]);
-        setGenresAmt(0);
-        setGenresArr([]);
-      } else {
-        setSearchType(searchMode[1]);
-        setSearchQuery('');
-      }
-    } else {
-      if (current === searchMode[3]) {
-        setSearchType(searchMode[2]);
-        setSearchQuery('MostPopular');
-      } else if (current === searchMode[2]) {
-        setSearchQuery('');
-        setSearchType(searchMode[1]);
-      } else if (current === searchMode[1]) {
-        setSearchQuery('');
-        setSearchType(searchMode[0]);
-        setGenresAmt(0);
-        setGenresArr([]);
-      } else {
-        setSearchType(searchMode[3]);
-        setSearchQuery('MostPopular');
-      }
-    }
-    if (!togglePallet) {
-      setTogglePallet(true);
-      setTimeout(() => {
-        setTogglePallet(false);
-      }, 1500)
-    }
-  }
+  const handleSwitchMode = (e, current, direction) => {
+    e.stopPropagation();
+    e.preventDefault();
 
+    const switchMode = (current, direction) => {
+      if (direction === 'forwards') {
+        if (current === searchMode[3]) {
+          setSearchType(searchMode[0]);
+          setSearchQuery('');
+        } else if (current === searchMode[2]) {
+          setSearchQuery('MostPopular');
+          setSearchType(searchMode[3]);
+        } else if (current === searchMode[1]) {
+          setSearchQuery('MostPopular');
+          setSearchType(searchMode[2]);
+          setGenresAmt(0);
+          setGenresArr([]);
+        } else {
+          setSearchType(searchMode[1]);
+          setSearchQuery('');
+        }
+      } else {
+        if (current === searchMode[3]) {
+          setSearchType(searchMode[2]);
+          setSearchQuery('MostPopular');
+        } else if (current === searchMode[2]) {
+          setSearchQuery('');
+          setSearchType(searchMode[1]);
+        } else if (current === searchMode[1]) {
+          setSearchQuery('');
+          setSearchType(searchMode[0]);
+          setGenresAmt(0);
+          setGenresArr([]);
+        } else {
+          setSearchType(searchMode[3]);
+          setSearchQuery('MostPopular');
+        }
+      }
+      if (!togglePallet) {
+        setTogglePallet(true);
+        setTimeout(() => {
+          setTogglePallet(false);
+        }, 1500)
+      }
+    }
+    switchMode(current, direction);
+  }
+  
   const {desc, disabledInput} = searchType;
   const [hoverBtn, setHoverBtn] = useState(false);
 
@@ -160,6 +166,12 @@ const FormSearch = ({
     }
   }
 
+  const handleFocusBar = (e, toggle) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setFocusBar(toggle);
+  }
+
   return (
     <>
       <Grid container spacing={4}>
@@ -189,20 +201,20 @@ const FormSearch = ({
             />}
 
             <div className='search-toggle-container'>
-              <Button onClick={()=> switchMode(searchType, 'backwards')} variant='secondary'>
+              <Button style={{cursor: 'pointer'}} onClick={(e)=> handleSwitchMode(e, searchType, 'backwards')} variant='secondary'>
                 <Icon style={{color: '#222'}}>arrow_left</Icon>
               </Button>
               <span className='change-mode'>
                 change mode
               </span>
-              <Button onClick={()=> switchMode(searchType, 'forwards')} variant='secondary'>
+              <Button style={{cursor: 'pointer'}} onClick={(e)=> handleSwitchMode(e, searchType, 'forwards')} variant='secondary'>
                 <Icon style={{color: '#222'}}>arrow_right</Icon>
               </Button>
             </div>
           </div>
         </Grid>
         <Grid item xs={4} alignSelf='center'>
-          <Box className='request-container' onClick={(!currentResultsArr.length && !searchQuery.length) ? () => setFocusBar('toggle') : () => enterSearchUtility(searchQuery, searchType, secondaryLoading)} onMouseOver={() => setHoverBtn(true)} onMouseOut={() => setHoverBtn(false)}>
+          <Box className='request-container' onClick={(!currentResultsArr.length && !searchQuery.length) ? (e) => handleFocusBar(e, 'toggle') : (e) => handleSearchUtility(e, searchQuery, searchType, secondaryLoading)} onMouseOver={() => setHoverBtn(true)} onMouseOut={() => setHoverBtn(false)}>
             {!JSONloading && !secondaryLoading ? 
               <>
                 <div className='bg-0'></div>
