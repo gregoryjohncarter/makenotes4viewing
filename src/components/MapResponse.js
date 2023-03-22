@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 
 import Grid from '@mui/material/Grid';
 import Icon from '@mui/material/Icon';
@@ -29,10 +29,17 @@ const MapResponse = memo(function MapResponse({currentResultsArr, JSONloading, c
       '--i': `${count}`
     };
     const [hideQueue, setHideQueue] = useState(true);
+
+    const myRef = useRef();
     
     useEffect(() => {
-      if (detailDisplay !== 'search') {
+      if (detailDisplay !== 'search' && detailDisplay !== 'detail' && detailDisplay !== 'home' && detailDisplay !== 'init') {
         setHideQueue(false);
+        if (count > 7) {
+          setTimeout(() => {
+            myRef.current.scrollIntoView();
+          }, 250);
+        }
       } else {
         let timeVal = count * 122;
         setTimeout(() => {
@@ -44,7 +51,7 @@ const MapResponse = memo(function MapResponse({currentResultsArr, JSONloading, c
     let countAdj = (currentPage * 30 - 30) + count;
 
     return (
-      !hideQueue ? <>
+      !hideQueue && <>
         <div style={spanStyle} className='load-in'>
           {count === 0 && <hr></hr>}
           <span style={counterStyle}>
@@ -57,17 +64,17 @@ const MapResponse = memo(function MapResponse({currentResultsArr, JSONloading, c
             </span>
           </Button>
           <Button variant='outlined' 
-            disabled={detailDisplay === imdbID || secondaryLoading} 
+            disabled={secondaryLoading} 
             onClick={imdbID === undefined ? () => requestSelectionInfo(altID) : () => requestSelectionInfo(imdbID)} 
             style={{width:'85px'}}
           >
             {(detailDisplay === imdbID && altID === undefined) ? 
-              <div style={{display: 'inline-flex', flexDirection: 'row', letterSpacing: '.2vh', fontSize:'14px'}}>
+              <div ref={myRef} style={{display: 'inline-flex', flexDirection: 'row', letterSpacing: '.2vh', fontSize:'14px'}}>
                 <p className='DOTS1'>.</p>
                 <p className='DOTS2'>.</p>
                 <p className='DOTS3'>.</p>
               </div> : (imdbID === undefined && detailDisplay === altID) ? 
-              <div style={{display: 'inline-flex', flexDirection: 'row', letterSpacing: '.2vh', fontSize:'14px'}}>
+              <div ref={myRef} style={{display: 'inline-flex', flexDirection: 'row', letterSpacing: '.2vh', fontSize:'14px'}}>
                 <p className='DOTS1'>.</p>
                 <p className='DOTS2'>.</p>
                 <p className='DOTS3'>.</p>
@@ -76,7 +83,7 @@ const MapResponse = memo(function MapResponse({currentResultsArr, JSONloading, c
           <hr>
           </hr>
         </div>
-      </> : <></>
+      </>
     )
   });
     
@@ -98,7 +105,7 @@ const MapResponse = memo(function MapResponse({currentResultsArr, JSONloading, c
           detailDisplay={detailDisplay} 
           key={indexKey}
           secondaryLoading={secondaryLoading}
-        />
+        /> 
       }) : <></>}
     </Grid>
   ) 

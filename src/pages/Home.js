@@ -11,10 +11,10 @@ import { createTheme } from '@mui/material/styles';
 
 const Home = () => {
   const [searchMode] = useState([
-    {desc: 'Search by title', icon: '', disabledInput: false},
-    {desc: 'Search by genre', icon: '', disabledInput: false}, 
-    {desc: 'Search top 100 (TV)', icon: '', disabledInput: true}, 
-    {desc: 'Search top 100 (Film)', icon: '', disabledInput: true}
+    {desc: 'Search by title', disabledInput: false},
+    {desc: 'Search by genre', disabledInput: false}, 
+    {desc: 'Search top 100 (TV)', disabledInput: true}, 
+    {desc: 'Search top 100 (Film)', disabledInput: true}
   ]);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -26,6 +26,8 @@ const Home = () => {
   const [currentSel, setCurrentSel] = useState([]);
   const [currentSelArr, setCurrentSelArr] = useState(false);
   const [latentResultsArr, setLatentResultsArr] = useState([]);
+
+  const [secondaryLoading, setSecondaryLoading] = useState(false);
 
   useEffect(() => {
     if (secondaryLoading) {
@@ -68,7 +70,6 @@ const Home = () => {
     }
   }, [focusBar])
 
-  const [secondaryLoading, setSecondaryLoading] = useState(false);
   const [genresAmt, setGenresAmt] = useState(0);
   const [genresArr, setGenresArr] = useState([]);
 
@@ -216,7 +217,7 @@ const Home = () => {
         setTimeout(() => {
           setDetailDisplay('detail');
           setSecondaryLoading(false);
-        }, 1250);
+        }, 1750);
       } else {
         setDetailDisplay('search');
       }
@@ -227,6 +228,7 @@ const Home = () => {
     if (secondaryLoading) {
       return
     }
+    setSecondaryLoading(true);
     setDetailDisplay(idIMDB);
     var apiUrlSelection = "https://www.omdbapi.com/?apikey=" + process.env.REACT_APP_REQUESTHOMEKEY + "&i=" + idIMDB + "&plot=full";
     try {
@@ -240,7 +242,7 @@ const Home = () => {
       console.log(error);
       setBreadcrumbQuery('Request failed');
     }
-  }, [setBreadcrumbQuery, setDetailDisplay, setCurrentSelArr, secondaryLoading]);
+  }, [setBreadcrumbQuery, setDetailDisplay, setCurrentSelArr, secondaryLoading, setSecondaryLoading]);
 
   const [pageCount, setPageCount] = useState(false);
 

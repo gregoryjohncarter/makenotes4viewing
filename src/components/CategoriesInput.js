@@ -40,7 +40,7 @@ const CategoriesInput = ({openModal, setOpenModal, handleGenreList, searchQuery}
             </div>
           </div>
         </div>
-        <div className='modal-style blur'>
+        <div className='modal-blur blur'>
         </div>
       </Box>
     </Modal>

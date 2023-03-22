@@ -74,6 +74,7 @@ h2 {
   background-color: #f0f8ff85;
   border-radius: 4px;
   padding: 12px;
+  z-index: 3;
 }
 
 .results-inner-div-e {
@@ -220,21 +221,30 @@ h2 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #4c4c4cdf;
+  background-color: #3b3b3baa;
   width: 700px;
-  border: 2px solid #000;
+  border: 3px solid #000000ad;
+  flex-direction: column;
+  padding: 20px;
+  z-index: 5;
+}
+
+.modal-blur {
+  display:flex;
+  height: 450px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #12091faa;
+  width: 700px;
   flex-direction: column;
   padding: 20px;
 }
 
-.z-index {
-  z-index: 4;
-}
-
 .blur {
-  z-index: -10;
-  filter: blur(15px);
-  background-color: #4c4c4c4e;
+  z-index: 4 !important;
+  filter: blur(22px);
 }
 
 .mytbl{
@@ -430,11 +440,9 @@ ol {
   .body { 
     background-blend-mode: lighten;
   }
-
   .genres-label {
     color: #6b90ba;
   }
-
   .req-btn {
     color: #d7c1d7 !important;
   }
@@ -445,7 +453,6 @@ ol {
     max-width: 65ch;
     font-size: 14px;
   }
-
   .plot-modal {
     width: 550px;
   }
@@ -459,71 +466,63 @@ ol {
   .modal-style {
     width: 600px;
   }
+  .modal-blur {
+    width: 600px;
+  }
 }
 
 @media screen and (max-width: 575px) {
   .search-container {
     padding: 5px;
   }
-
   .request-container {
     margin: -10px;
     border: 5px solid #808080cc;
     backdrop-filter: blur(7px);
     padding: 10px;
   }
-
   .req-btn {
     padding-left: 21px !important;
   }
-
   .trim {
     max-width: 34ch;
     font-size: 9px;
   }
-
   .results-inner-div {
     height: 625px;
     overflow-y: scroll;
   }
-
   .results-div {
     height: 625px;
   }
-
   .crumb-results {
     max-width: 25ch;
     font-size: 10px;
   }
-
   .modal-style {
     width: 300px;
   }
-
+  .modal-blur {
+    width: 300px;
+  }
   .genres-label {
     font-size: 15px;
   }
-
   .source-score {
     font-size: 10px;
   }
-
   .plot-modal {
     width: 300px;
   }
-
   .sel-title {
     font-size: 20px;
   }
-
   .entry, .entry-r {
     font-size: 14px;
   }
-
   h3 {
     margin: 10px;
   }
-
   img {
     margin-left: 5px;
   }

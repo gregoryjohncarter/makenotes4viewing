@@ -8,7 +8,22 @@ import Icon from '@mui/material/Icon';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
-const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, searchQuery, setSearchQuery, enterSearchUtility, secondaryLoading, currentResultsArr, setFocusBar, genresAmt, setGenresAmt, genresArr, setGenresArr}) => {
+const FormSearch = ({
+  searchType, 
+  setSearchType, 
+  searchMode, 
+  JSONloading, 
+  searchQuery, 
+  setSearchQuery, 
+  enterSearchUtility, 
+  secondaryLoading, 
+  currentResultsArr, 
+  setFocusBar, 
+  genresAmt, 
+  setGenresAmt, 
+  genresArr, 
+  setGenresArr
+}) => {
   const [togglePallet, setTogglePallet] = useState(false);
 
   const switchMode = (current, direction) => {
@@ -53,7 +68,7 @@ const FormSearch = ({searchType, setSearchType, searchMode, JSONloading, searchQ
     }
   }
 
-  const {desc, icon, disabledInput} = searchType;
+  const {desc, disabledInput} = searchType;
   const [hoverBtn, setHoverBtn] = useState(false);
 
   const [openModal, setOpenModal] = useState(false);

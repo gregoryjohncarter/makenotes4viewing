@@ -3,3 +3,5 @@ With this app, unravel a variety of examples of TV shows, movies, and their asso
 
 # References of tools used
 React.js, imdb API, omdb API, Material UI
+
+<img src='./src/assets/mnfvscreen.png' alt='img screenshot app'/>
