@@ -29,6 +29,7 @@ h2 {
   padding: 10px;
   background-position: 0% 50%;
   margin-top: 7px;
+  z-index: 3;
 }
 
 @keyframes gradient {
@@ -113,6 +114,7 @@ h2 {
   padding: 20px;
   overflow: hidden;
   cursor: pointer;
+  z-index: 2;
 }
 
 /* Animated Sliding Diagonals Background pattern - Chris Smith codepen */
@@ -127,6 +129,7 @@ h2 {
   top:0;
   z-index:-1;
   transition: opacity 2s ease;
+  overflow: hidden;
 }
 
 .bg-0 {
@@ -140,6 +143,7 @@ h2 {
   top:0;
   z-index:-1;
   transition: opacity 2s ease;
+  overflow: hidden;
 }
 
 .bg2 {

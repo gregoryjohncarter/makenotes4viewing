@@ -74,7 +74,7 @@ const Home = () => {
   const [genresArr, setGenresArr] = useState([]);
 
   const handleSearchUtility = (e, searchQuery, searchType, loading) => {
-    e.stopPropogation();
+    e.stopPropagation();
     e.preventDefault();
 
     const enterSearchUtility = (searchQuery, searchType, loading) => {
