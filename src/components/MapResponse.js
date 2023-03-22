@@ -39,11 +39,12 @@ const MapResponse = memo(function MapResponse({currentResultsArr, JSONloading, c
           setHideQueue(false);
         }, timeVal);
       }
-    }, []);
+    }, [detailDisplay]);
+
     let countAdj = (currentPage * 30 - 30) + count;
 
     return (
-      !hideQueue && <>
+      !hideQueue ? <>
         <div style={spanStyle} className='load-in'>
           {count === 0 && <hr></hr>}
           <span style={counterStyle}>
@@ -75,10 +76,10 @@ const MapResponse = memo(function MapResponse({currentResultsArr, JSONloading, c
           <hr>
           </hr>
         </div>
-      </>
+      </> : <></>
     )
   });
-
+    
   return (
     <Grid container spacing={0} flexDirection='column' alignItems='start'>
       {!JSONloading ? currentResultsArr.map((item, index) => {
