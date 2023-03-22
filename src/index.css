@@ -29,7 +29,7 @@ h2 {
   padding: 10px;
   background-position: 0% 50%;
   margin-top: 7px;
-  z-index: 3;
+  z-index: 13;
 }
 
 @keyframes gradient {
@@ -130,6 +130,7 @@ h2 {
   z-index:-1;
   transition: opacity 2s ease;
   overflow: hidden;
+  pointer-events: none;
 }
 
 .bg-0 {
@@ -144,6 +145,7 @@ h2 {
   z-index:-1;
   transition: opacity 2s ease;
   overflow: hidden;
+  pointer-events: none;
 }
 
 .bg2 {

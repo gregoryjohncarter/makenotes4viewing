@@ -214,7 +214,7 @@ const FormSearch = ({
           </div>
         </Grid>
         <Grid item xs={4} alignSelf='center'>
-          <Box className='request-container' onClick={(!currentResultsArr.length && !searchQuery.length) ? (e) => handleFocusBar(e, 'toggle') : (e) => handleSearchUtility(e, searchQuery, searchType, secondaryLoading)}>
+          <Box style={{cursor: 'pointer'}} className='request-container' onClick={(!currentResultsArr.length && !searchQuery.length) ? (e) => handleFocusBar(e, 'toggle') : (e) => handleSearchUtility(e, searchQuery, searchType, secondaryLoading)} onMouseEnter={() => setHoverBtn(true)} onMouseLeave={() => setHoverBtn(false)}>
             {!JSONloading && !secondaryLoading ? 
               <>
                 <div className='bg-0'></div>
