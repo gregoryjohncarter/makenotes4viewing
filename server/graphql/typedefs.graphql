@@ -1,0 +1,53 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Media {
+  id: ID!
+  imdb: String!
+  title: String!
+  poster: String!
+  year: String!
+  contentRating: String!
+  genre: String!
+  stars: String!
+  plot: String!
+  director: String!
+  runtime: String!
+}
+
+type MediaResult {
+  success: Boolean!
+  errors: [String]
+  media: Media
+}
+
+type User {
+  id: ID!
+  username: String!
+  email: String!
+  password: String!
+  medias: [Media]
+}
+
+type UserResult {
+  success: Boolean!
+  errors: [String]
+  user: User
+}
+
+type Auth {
+  user: User
+}
+
+type Query {
+  listUser(id: ID!): UserResult!
+}
+
+type Mutation {
+  login(email: String!, password: String!): Auth
+  addUser(username: String!, email: String!, password: String!): Auth
+  addMedia(imdb: String, title: String, poster: String, year: String, contentRating: String, genre: String, stars: String, plot: String, director: String, runtime: String) : User
+  removeMedia(id: String!): User
+}
