@@ -1,6 +1,6 @@
 from server.db import Base
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import validates
+from sqlalchemy.orm import validates, relationship
 import bcrypt
 
 salt = bcrypt.gensalt()
@@ -11,6 +11,7 @@ class User(Base):
   username = Column(String(50), nullable=False)
   email = Column(String(50), nullable=False, unique=True)
   password = Column(String(100), nullable=False)
+  medias = relationship('Media', cascade='all,delete')
 
   @validates('email')
   def validate_email(self, key, email):
