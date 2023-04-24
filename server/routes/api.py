@@ -99,7 +99,7 @@ def create():
 
   return jsonify(id = newMedia.id)
 
-# DELETE POST 
+# DELETE MEDIA
 @bp.route('/medias/<id>', methods=['DELETE'])
 def delete(id):
   db = get_db()

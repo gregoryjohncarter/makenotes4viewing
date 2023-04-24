@@ -1,1 +1,1 @@
-web: gunicorn --chdr server app:app
+web: gunicorn --chdr server __init__:__init__

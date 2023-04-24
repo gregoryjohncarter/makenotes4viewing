@@ -1,5 +1,5 @@
-from server.routes import api
 from flask import Flask
+from server.routes import api
 from server.db import init_db
 from flask_cors import CORS
 
@@ -14,3 +14,5 @@ def create_app(test_config=None):
   init_db(app)
 
   return app
+
+create_app()
