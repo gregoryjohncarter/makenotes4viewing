@@ -12,7 +12,6 @@ def signup():
   db = get_db()
 
   try:
-    # attempt creating a new user
     newUser = User(
       username = data['username'],
       email = data['email'],
@@ -24,11 +23,8 @@ def signup():
 
   except:
     print(sys.exe_info()[0])
-
-    # insert failed, so rollback and send error to front end
     db.rollback()
 
-    # insert failed, so send error to front end
     return jsonify(message = 'Signup failed'), 500
 
   session.clear()
@@ -40,7 +36,6 @@ def signup():
 # LOGOUT USER
 @bp.route('/users/logout', methods=['POST'])
 def logout():
-  # remove session variables
   session.clear()
 
   return '', 204
@@ -74,7 +69,7 @@ def create():
   db = get_db()
 
   try:
-    # create a new post
+    # create new media item
     newMedia = Media(
       imdbID = data['imdbID'],
       title = data['title'],
@@ -95,7 +90,7 @@ def create():
   except:
     print(sys.exc_info()[0])
     db.rollback()
-    return jsonify(message = 'Post failed'), 500
+    return jsonify(message = 'Item failed'), 500
 
   return jsonify(id = newMedia.id)
 
@@ -115,3 +110,24 @@ def delete(id):
     return jsonify(message = 'Media not found'), 404
 
   return '', 204
+
+@bp.route('/bookmark', methods=['GET'])
+def dash():
+  db = get_db()
+
+  try:
+    medias = (
+      db.query(Media)
+      .filter(Media.user_id == session.get('user_id'))
+      .all()
+    )
+    
+  except:
+    print(sys.exc_info()[0])
+    db.rollback()
+    return jsonify(message = 'Medias not found'), 400
+  
+  mediasArr = []
+  for media in medias:
+    mediasArr.append(media.toDict()) 
+  return jsonify(mediasArr)

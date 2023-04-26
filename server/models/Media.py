@@ -1,5 +1,5 @@
 from server.db import Base
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, inspect
 from sqlalchemy.orm import relationship
 
 class Media(Base):
@@ -17,3 +17,5 @@ class Media(Base):
   runtime = Column(String(100), nullable=False)
   user = relationship('User')
   user_id = Column(Integer, ForeignKey('users.id'))
+  def toDict(self):
+    return { c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs }
