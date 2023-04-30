@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from server.routes import api
 from server.db import init_db
 from flask_cors import CORS
@@ -9,5 +9,9 @@ app.config.from_mapping(
   SECRET_KEY='super_secret_key'
 )
 CORS(app)
+@app.route('/', defaults={'path': ''})
+def serve(path):
+  return send_from_directory(app.static_folder, 'index.html')
 app.register_blueprint(api)
 init_db(app)
+
