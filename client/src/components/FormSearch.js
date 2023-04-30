@@ -182,8 +182,8 @@ const FormSearch = ({
         <Grid item xs={8}>
           <div className={togglePallet ? 'search-container search-mode-change' : 'search-container'}>
             <div style={{display: 'inline-flex', justifyContent: 'space-between', width: '100%'}}>
-              <h2 style={{flex: '0 100%', paddingTop: '7px'}}>MakeNotes4Viewing</h2>
-              <div style={{flex: '0 0%', paddingBottom: '15px'}}><Button variant='outlined' color={loginStatus ? 'success' : 'primary'} onClick={()=> setOpenLogin(true)}><Icon>account_circle</Icon></Button></div>
+              <h2 style={{flex: '0 100%', paddingTop: '7px', cursor: 'default'}}>MakeNotes4Viewing</h2>
+              <div style={{flex: '0 0%', paddingBottom: '15px'}}><Button variant='outlined' title={loginStatus ? 'Logout' : 'Login'} color={loginStatus ? 'success' : 'primary'} onClick={()=> setOpenLogin(true)}><Icon>account_circle</Icon></Button></div>
             </div>
             {searchType !== searchMode[1] ? 
             <TextField 
