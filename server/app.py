@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from server.routes import api
 from server.db import init_db
 from flask_cors import CORS
@@ -10,4 +10,7 @@ app.config.from_mapping(
 )
 CORS(app)
 app.register_blueprint(api)
+@app.route('/')
+def root():
+  return render_template('index.html')
 init_db(app)
