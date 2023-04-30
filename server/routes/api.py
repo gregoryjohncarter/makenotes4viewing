@@ -1,10 +1,14 @@
 from server.models import User, Media
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, request, jsonify, session, render_template
 from server.db import get_db
 import sys
 from sqlalchemy import exc
 
 bp = Blueprint('api', __name__, url_prefix='/api')
+
+@bp.route('/')
+def serve():
+  return render_template('index.html')
 
 # CREATE USER
 @bp.route('/users', methods=['POST'])
