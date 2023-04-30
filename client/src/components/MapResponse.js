@@ -33,7 +33,7 @@ const MapResponse = memo(function MapResponse({currentResultsArr, JSONloading, c
     const myRef = useRef();
     
     useEffect(() => {
-      if (detailDisplay !== 'search' && detailDisplay !== 'detail' && detailDisplay !== 'home' && detailDisplay !== 'init') {
+      if (detailDisplay !== 'search' && detailDisplay !== 'detail' && detailDisplay !== 'home' && detailDisplay !== 'init' && detailDisplay !== 'bookmarks') {
         setHideQueue(false);
         if (count > 7) {
           setTimeout(() => {

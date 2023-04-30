@@ -2,6 +2,7 @@ from server.models import User, Media
 from flask import Blueprint, request, jsonify, session
 from server.db import get_db
 import sys
+from sqlalchemy import exc
 
 bp = Blueprint('api', __name__, url_prefix='/api')
 
@@ -73,14 +74,6 @@ def create():
     newMedia = Media(
       imdbID = data['imdbID'],
       title = data['title'],
-      poster = data['poster'],
-      year = data['year'],
-      contentRating = data['contentRating'],
-      genre = data['genre'],
-      stars = data['stars'],
-      plot = data['plot'],
-      director = data['director'],
-      runtime = data['runtime'],
       user_id = session.get('user_id')
     )
 

@@ -7,7 +7,7 @@ import Modal from '@mui/material/Modal';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
-const LoginForm = ({ openModal, setOpenModal }) => {
+const LoginForm = ({ openModal, setOpenModal, setLoginStatus, loginStatus }) => {
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
@@ -16,6 +16,7 @@ const LoginForm = ({ openModal, setOpenModal }) => {
 
   const [inputLogin, setInputLogin] = useState({email:'', password:''});
   const handleLogin = async (input) => {
+    setInputLogin({email:'', password:''});
     if (input.email.length < 4 || input.password.length < 4) {
       return
     }
@@ -23,7 +24,7 @@ const LoginForm = ({ openModal, setOpenModal }) => {
     let password = input.password;
 
     if (input.email.length > 4 && input.password.length > 4) {
-      const response = await fetch('/api/users', {
+      const response = await fetch('/api/users/login', {
         method: 'post',
         body: JSON.stringify({
           email,
@@ -34,6 +35,8 @@ const LoginForm = ({ openModal, setOpenModal }) => {
       // check the response status
       if (response.ok) {
         console.log('success');
+        setLoginStatus(true);
+        setOpenModal(false);
       } else {
         alert(response.statusText);
       }
@@ -42,6 +45,7 @@ const LoginForm = ({ openModal, setOpenModal }) => {
 
   const [inputSignup, setInputSignup] = useState({username: '', email:'', password:''});
   const handleSignup = async (input) => {
+    setInputSignup({username: '', email: '', password: ''});
     if (input.username.length < 4 || input.email.length < 4 || input.password.length < 4) {
       return
     }
@@ -62,9 +66,25 @@ const LoginForm = ({ openModal, setOpenModal }) => {
       // check the response status
       if (response.ok) {
         console.log('success');
+        setLoginStatus(true);
+        setOpenModal(false);
       } else {
         alert(response.statusText);
       }
+    }
+  }
+
+  const handleLogout = async () => {
+    const response = await fetch('/api/users/logout', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' }
+    });
+  
+    if (response.ok) {
+      document.location.replace('/');
+      setLoginStatus(false);
+    } else {
+      alert(response.statusText);
     }
   }
 
@@ -75,7 +95,7 @@ const LoginForm = ({ openModal, setOpenModal }) => {
       aria-labelledby='modal-modal-title'
       aria-describedby='modal-modal-description'
     > 
-      <div className='modal-style mytbl'> 
+      <div className='modal-style modal-style-2 mytbl'> 
         <Box sx={{ width: '100%' }} id='modal-modal-description'>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
@@ -91,6 +111,7 @@ const LoginForm = ({ openModal, setOpenModal }) => {
           >
             {value === 0 && (
               <Box sx={{ p: 6 }}>
+                {!loginStatus ? 
                 <div style={{display: 'block'}}>
                   <div>
                     <TextField
@@ -115,6 +136,8 @@ const LoginForm = ({ openModal, setOpenModal }) => {
                     Submit Login
                   </Button>
                 </div>
+                 : 
+                 <Button variant='outlined' onClick={()=>handleLogout()}>Logout</Button>}
               </Box>
             )}
           </div>

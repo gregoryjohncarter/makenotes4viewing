@@ -23,7 +23,9 @@ const FormSearch = ({
   genresAmt, 
   setGenresAmt, 
   genresArr, 
-  setGenresArr
+  setGenresArr,
+  setLoginStatus,
+  loginStatus
 }) => {
   const [togglePallet, setTogglePallet] = useState(false);
 
@@ -181,7 +183,7 @@ const FormSearch = ({
           <div className={togglePallet ? 'search-container search-mode-change' : 'search-container'}>
             <div style={{display: 'inline-flex', justifyContent: 'space-between', width: '100%'}}>
               <h2 style={{flex: '0 100%', paddingTop: '7px'}}>MakeNotes4Viewing</h2>
-              <div style={{flex: '0 0%', paddingBottom: '15px'}}><Button variant='outlined' onClick={()=> setOpenLogin(true)}><Icon>account_circle</Icon></Button></div>
+              <div style={{flex: '0 0%', paddingBottom: '15px'}}><Button variant='outlined' color={loginStatus ? 'success' : 'primary'} onClick={()=> setOpenLogin(true)}><Icon>account_circle</Icon></Button></div>
             </div>
             {searchType !== searchMode[1] ? 
             <TextField 
@@ -249,7 +251,7 @@ const FormSearch = ({
         </Grid>
       </Grid>
       <CategoriesInput openModal={openModal} setOpenModal={setOpenModal} handleGenreList={handleGenreList} searchQuery={searchQuery}/>
-      <LoginForm openModal={openLogin} setOpenModal={setOpenLogin}/>
+      <LoginForm openModal={openLogin} setOpenModal={setOpenLogin} setLoginStatus={setLoginStatus} loginStatus={loginStatus}/>
     </>
   )
 }

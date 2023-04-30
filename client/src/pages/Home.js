@@ -218,14 +218,16 @@ const Home = () => {
   }
   
   useEffect(() => {
-    if (currentResultsArr.length > 0) {
+    if (currentResultsArr.length > 0 || breadcrumbQuery === 'bookmarks') {
       if (currentSelArr) {
         setTimeout(() => {
           setDetailDisplay('detail');
           setSecondaryLoading(false);
         }, 1750);
       } else {
-        setDetailDisplay('search');
+        if (breadcrumbQuery !== 'bookmarks') {
+          setDetailDisplay('search');
+        }
       }
     }
   }, [currentSelArr]);
@@ -284,6 +286,62 @@ const Home = () => {
     }
   }, [currentPage]);
 
+  const [loginStatus, setLoginStatus] = useState(false);
+
+  const bookmarkSelection = async (currentSel, selection) => {
+    if (currentSel && loginStatus) {
+      if (selection === 'add') {
+        let imdbID = currentSel.imdbID;
+        let title = currentSel.Title;
+
+        const response = await fetch('/api/medias', {
+          method: 'post',
+          body: JSON.stringify({
+            imdbID,
+            title,
+          }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        // check the response status
+        if (response.ok) {
+          console.log('success!!');
+          setBookmarksList([...bookmarksList, { imdbID: imdbID, title: title }])
+        } else {
+          alert(response.statusText);
+        }
+      } else {
+        let imdbID = currentSel.imdbID;
+        const response = await fetch(`/api/medias/${imdbID}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        if (response.ok) {
+          console.log('success!!');
+          setBookmarksList(bookmarksList.filter((bookmark) => { return bookmark.imdbID !== currentSel.imdbID }));
+        } else {
+          alert(response.statusText);
+        }
+      }
+    } else {
+      return;
+    }
+  }
+
+  const [bookmarksList, setBookmarksList] = useState([]);
+
+  useEffect(() => {
+    if (loginStatus) {
+      const bookmarksRequest = async () => {
+        const bookmarks = await fetch('/api/bookmark');
+        let bookmarksResults = await bookmarks.json();
+        setBookmarksList(bookmarksResults);
+      }
+      bookmarksRequest();
+    } else {
+      setBookmarksList([]);
+    }
+  }, [loginStatus])
+
   const theme = createTheme({
     palette: {
       neutral: {
@@ -314,6 +372,8 @@ const Home = () => {
         setGenresAmt={setGenresAmt}
         genresArr={genresArr}
         setGenresArr={setGenresArr}
+        setLoginStatus={setLoginStatus}
+        loginStatus={loginStatus}
       />
       <ContainerResults
         currentResultsArr={currentResultsArr}
@@ -322,6 +382,7 @@ const Home = () => {
         currentSelArr={currentSelArr}
         setCurrentSelArr={setCurrentSelArr}
         breadcrumbQuery={breadcrumbQuery}
+        setBreadcrumbQuery={setBreadcrumbQuery}
         focusBar={focusBar}
         JSONloading={JSONloading}
         currentPage={currentPage}
@@ -331,8 +392,11 @@ const Home = () => {
         requestSelectionInfo={requestSelectionInfo}
         detailDisplay={detailDisplay}
         setDetailDisplay={setDetailDisplay}
+        loginStatus={loginStatus}
+        bookmarkSelection={bookmarkSelection}
+        bookmarksList={bookmarksList}
       />
-      {latentResultsArr.length && currentSel === 'pages-request' && pageCount > 1 && !currentSelArr ?
+      {latentResultsArr.length && currentSel === 'pages-request' && pageCount > 1 && !currentSelArr && breadcrumbQuery !== 'bookmarks' ?
         <Box display='flex' justifyContent='center'>
           <div style={{display: 'flex'}}>
             <Button theme={theme} variant='contained' color={currentPage === 1 ? 'neutral' : 'active'} onClick={currentPage === 1 ? () => console.log('') : () => setCurrentPage(currentPage - 1)} style={{width: '65px', marginTop: '10px'}}><Icon>navigate_before</Icon></Button>
