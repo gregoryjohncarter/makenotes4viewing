@@ -9,9 +9,11 @@ app.config.from_mapping(
   SECRET_KEY='super_secret_key'
 )
 CORS(app)
+app.register_blueprint(api)
 @app.route('/', defaults={'path': ''})
 def serve(path):
   return send_from_directory(app.static_folder, 'index.html')
-app.register_blueprint(api)
+if __name__ == '__main__':
+  app.run(host='0.0.0.0')
 init_db(app)
 
