@@ -2,6 +2,7 @@ import React from 'react';
 
 import SelectionResults from '../components/SelectionResults.js';
 import MapResponse from '../components/MapResponse.js';
+import Bookmarks from '../components/Bookmarks.js';
 
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
@@ -11,11 +12,12 @@ import Icon from '@mui/material/Icon';
 import Breadcrumbs from '@mui/joy/Breadcrumbs';
 
 const ContainerResults = ({
-  currentResultsArr, 
+  currentResultsArr,
   setCurrentSel, 
   currentSelArr, 
   setCurrentSelArr, 
   breadcrumbQuery, 
+  setBreadcrumbQuery,
   focusBar, 
   JSONloading, 
   currentPage, 
@@ -24,7 +26,10 @@ const ContainerResults = ({
   requestSelectionInfo, 
   detailDisplay, 
   setDetailDisplay,
-  secondaryLoading
+  secondaryLoading,
+  loginStatus,
+  bookmarkSelection,
+  bookmarksList
 }) => {
 
   const handleBack = () => {
@@ -32,11 +37,25 @@ const ContainerResults = ({
     setDetailDisplay('search');
   }
 
+  const handleBookmarks = () => {
+    if (secondaryLoading) {
+      return
+    }
+    setBreadcrumbQuery('bookmarks');
+    setCurrentSelArr(false);
+    setDetailDisplay('bookmarks');
+  }
+
   return (
     <Grid container rowSpacing={2}>
       <Grid item xs={12}>
         {detailDisplay === 'init' ? 
           <div className='results-div-e'>
+            {loginStatus && 
+              <div className='tab-bkmk'>
+                <Button onClick={()=>handleBookmarks()} variant='contained' color='inherit'><Icon>pending</Icon>Bookmarks</Button>
+              </div>
+            }
             <div className='results-inner-div-e'>
               <Box display='flex' className={focusBar === 'toggle' ? 'wo-input' : ''} justifyContent='center' style={{paddingTop: '80px'}}>
                 <Button size='small' variant='outlined' disabled>{!breadcrumbQuery ? 'Begin by searching above' : breadcrumbQuery}</Button>
@@ -45,11 +64,16 @@ const ContainerResults = ({
           </div>
            :
           <div className='results-div'>
+            {loginStatus && 
+              <div className='tab-bkmk'>
+                <Button onClick={()=>handleBookmarks()} variant='contained' color='inherit'><Icon>pending</Icon>Bookmarks</Button>
+              </div>
+            }
             <div className='results-inner-div'>
               {detailDisplay === 'home' ? 
                 <Box display='flex' justifyContent='center' style={{paddingTop: '80px'}}>
                   <Button size='small' className='fade-scale' variant='outlined' disabled>Begin by searching above</Button>
-                </Box> : detailDisplay === 'search' || detailDisplay === currentSelArr.imdbID ? <>
+                </Box> : (detailDisplay === 'search' && breadcrumbQuery !== 'bookmarks') || (detailDisplay === currentSelArr.imdbID && breadcrumbQuery !== 'bookmarks') ? <>
                 <Breadcrumbs
                   separator='/'
                   size='md'
@@ -74,8 +98,22 @@ const ContainerResults = ({
                   detailDisplay={detailDisplay}
                   secondaryLoading={secondaryLoading}
                 />
-              </> : <>
-                <Breadcrumbs
+              </> : detailDisplay === 'bookmarks' || detailDisplay === currentSelArr.imdbID ? <>
+                  <Breadcrumbs
+                    separator='/'
+                    size='md'
+                  >
+                    <Link
+                      underline='hover'
+                      color='neutral'
+                      fontSize='inherit'
+                    >
+                      <span className='crumb-results'><Icon>apps</Icon>{breadcrumbQuery}</span>
+                    </Link>
+                  </Breadcrumbs>
+                  <Bookmarks requestSelectionInfo={requestSelectionInfo} bookmarksList={bookmarksList} secondaryLoading={secondaryLoading} detailDisplay={detailDisplay}/>
+                </> : <>
+                {breadcrumbQuery !== 'bookmarks' ? <Breadcrumbs
                   separator='/'
                   size='md'
                   aria-label='breadcrumb'
@@ -85,7 +123,7 @@ const ContainerResults = ({
                     color='neutral'
                     fontSize='inherit'
                   >
-                    <Button variant='text' onClick={handleBack}><span className='crumb-results'><Icon>search</Icon>{breadcrumbQuery}</span></Button>
+                    <Button variant='text' onClick={() => handleBack()}><span className='crumb-results'><Icon>search</Icon>{breadcrumbQuery}</span></Button>
                   </Link>
                   <Link
                     underline='hover'
@@ -94,7 +132,7 @@ const ContainerResults = ({
                   >
                     <span className='crumb-results'>{currentSelArr.Title}</span>
                   </Link>
-                </Breadcrumbs>
+                </Breadcrumbs> : <div style={{marginBottom: '20px', width: '100%'}}></div>}
                 <SelectionResults 
                   title={currentSelArr.Title} 
                   year={currentSelArr.Year} 
@@ -105,7 +143,13 @@ const ContainerResults = ({
                   poster={currentSelArr.Poster} 
                   rating={currentSelArr.Ratings} 
                   director={currentSelArr.Director}
-                  runtime={currentSelArr.Runtime}/>
+                  runtime={currentSelArr.Runtime}
+                  loginStatus={loginStatus}
+                  bookmarkSelection={bookmarkSelection}
+                  currentSelArr={currentSelArr}
+                  bookmarksList={bookmarksList}
+                  breadcrumbQuery={breadcrumbQuery}
+                />
                 </>
               }
             </div>

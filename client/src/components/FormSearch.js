@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import CategoriesInput from './CategoriesInput.js';
+import LoginForm from './LoginForm.js';
 
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
@@ -22,7 +23,9 @@ const FormSearch = ({
   genresAmt, 
   setGenresAmt, 
   genresArr, 
-  setGenresArr
+  setGenresArr,
+  setLoginStatus,
+  loginStatus
 }) => {
   const [togglePallet, setTogglePallet] = useState(false);
 
@@ -78,6 +81,7 @@ const FormSearch = ({
   const [hoverBtn, setHoverBtn] = useState(false);
 
   const [openModal, setOpenModal] = useState(false);
+  const [openLogin, setOpenLogin] = useState(false);
 
   const handleGenreList = (genre, currentInput) => {
     if (genresAmt === 3) {
@@ -177,7 +181,10 @@ const FormSearch = ({
       <Grid container spacing={4}>
         <Grid item xs={8}>
           <div className={togglePallet ? 'search-container search-mode-change' : 'search-container'}>
-            <h2>Make Notes 4 Viewing</h2>
+            <div style={{display: 'inline-flex', justifyContent: 'space-between', width: '100%'}}>
+              <h2 style={{flex: '0 100%', paddingTop: '7px', cursor: 'default'}}>MakeNotes4Viewing</h2>
+              <div style={{flex: '0 0%', paddingBottom: '15px'}}><Button variant='outlined' title={loginStatus ? 'Logout' : 'Login'} color={loginStatus ? 'success' : 'primary'} onClick={()=> setOpenLogin(true)}><Icon>account_circle</Icon></Button></div>
+            </div>
             {searchType !== searchMode[1] ? 
             <TextField 
               id='filled-basic' 
@@ -244,6 +251,7 @@ const FormSearch = ({
         </Grid>
       </Grid>
       <CategoriesInput openModal={openModal} setOpenModal={setOpenModal} handleGenreList={handleGenreList} searchQuery={searchQuery}/>
+      <LoginForm openModal={openLogin} setOpenModal={setOpenLogin} setLoginStatus={setLoginStatus} loginStatus={loginStatus}/>
     </>
   )
 }
