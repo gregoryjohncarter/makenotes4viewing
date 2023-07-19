@@ -120,7 +120,7 @@ const Home = () => {
       } else if (searchType === searchMode[1]) {
         if (searchQuery) {
           const searchByLabel = async (searchQuery) => {
-            let apiUrlGenre = "https://imdb-api.com/API/AdvancedSearch/" + process.env.REACT_APP_REQUESTACCKEY + "/?genres=" + searchQuery + "&count=150";
+            let apiUrlGenre = "https://imdb-api.com/API/AdvancedSearch/" + process.env.REACT_APP_REQUESTACCTKEY + "/?genres=" + searchQuery + "&count=150";
             apiUrlGenre = apiUrlGenre.replace(/ /g, '');
             try {
               let nearLabelsResults = await fetch(apiUrlGenre);
@@ -154,7 +154,7 @@ const Home = () => {
           let filmString = 'TVs';
           searchQuery += filmString;
           const searchByChartT = async (searchQuery) => {
-            let apiMostPopular = "https://imdb-api.com/en/API/" + searchQuery + "/" + process.env.REACT_APP_REQUESTACCKEY;
+            let apiMostPopular = "https://imdb-api.com/en/API/" + searchQuery + "/" + process.env.REACT_APP_REQUESTACCTKEY;
             try {
               let nearAcclaimResults = await fetch(apiMostPopular);
               let dataResults = await nearAcclaimResults.json();
@@ -185,7 +185,7 @@ const Home = () => {
           let filmString = 'Movies';
           searchQuery += filmString;
           const searchByChartF = async (searchQuery) => {
-            let apiMostPopular = "https://imdb-api.com/en/API/" + searchQuery + "/" + process.env.REACT_APP_REQUESTACCKEY;
+            let apiMostPopular = "https://imdb-api.com/en/API/" + searchQuery + "/" + process.env.REACT_APP_REQUESTACCTKEY;
             try {
               let nearAcclaimResults = await fetch(apiMostPopular);
               let dataResults = await nearAcclaimResults.json();
